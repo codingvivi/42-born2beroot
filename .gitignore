@@ -1,4 +1,7 @@
-ext/
 .git-old
-
+build/
+dist/
+turnin/
+*.tar.gz
+ext/
 vm/

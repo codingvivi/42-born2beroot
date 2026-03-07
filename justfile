@@ -1,24 +1,22 @@
 set shell := ["nu", "-c"]
 
 root := justfile_directory()
-ext-path := root / ext
+tag := `git describe --exact-match --tags HEAD`
 
 vm-path := root / "vm"
-vm-file := vm-path / "roccy.vdi"
+vm-file := vm-path / "42-rocky.vdi"
 
-iso-file := vm-path / "Rocky-10.1-x86_64-dvd1.iso"
-
-
+build     := root / "build"
 dist      := root / "dist"
-vm-dist   := dist / "rocky.vdi"
-turnin    := dist / "turnin"
-sig-file  := turnin / "Signature.txt"
+vm-dist   := build / "rocky.vdi"
+turnin    := root / "turnin"
+sig-file  := "Signature.txt"
 
-reset  := '\033[0m'
-bold   := '\033[1m'
-blue   := '\033[34m'
-green  := '\033[92m'
-yellow := '\033[33m'
+reset  := '\e[0m'
+bold   := '\e[1m'
+blue   := '\e[34m'
+green  := '\e[92m'
+yellow := '\e[33m'
 
 _header name:
     @printf "\n{{bold}}{{blue}}=== {{name}} ===\n{{reset}}"
@@ -30,34 +28,37 @@ _done name="":
     @if "{{name}}" != "" { print "{{bold}}{{green}}=== done: {{name}} ===\n{{reset}}" } else { print "{{bold}}{{green}}=== done ===\n{{reset}}" }
 
 
-
 vm-name := "42-rocky"
 
 snapshot:
-    VBoxManage snapshot {{vm-name}} take (git rev-parse --short HEAD)
+    VBoxManage snapshot {{vm-name}} take {{tag}}
 
 build-sig:
-    mkdir -v {{turnin}}
-    cd {{turnin}}
-    shasum "../vm/rocky.vdi" | {{sig-file}}
+    mkdir -v {{build}}
+    cd {{build}}; shasum ../vm/42-rocky.vdi | save -f {{sig-file}}
 
 build-readme:
-    rsync -v --mkpath README.md {{turnin}}/README.md
+    rsync -v --mkpath README.md {{build}}/README.md
+
+build-all:
+    @just _header "building all"
+    just build-sig
+    just build-readme
+    @just _done
 
 build-dist:
-    just _header "dist"
-    rm -rfv {{dist}}
-    mkdir -v {{turnin}}
-    rsync -av --mkpath --include-from='.dist-include' --exclude='*' . {{turnin}}/
-    rsync --timestamp{{vm-file}} {{vm-dist}}
-    just _done
+    @just _header "building dist"
+    just build-all
+    rsync -av --mkpath {{build}}/ {{turnin}}/
+    cd {{turnin}}; shasum -c {{sig-file}}
+    tar -czf {{root}}/turnin.tar.gz -C {{root}} turnin
+    mv {{root}}/turnin.tar.gz {{dist}}/
+    just snapshot
+    just sync-notes-from
+    @just _done
 
-fetch-iso:
-    aria2c -x 16 -s 16 -d {{vm-path}} ext/vm/ https://download.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.1-x86_64-dvd1.iso 
-
-
-check:
-    cd {{dist}} && shasum -c {{sig-file}}
+check file:
+     shasum -c {{file}}
 
 sync-notes-to:
     rsync -av {{root}}/todo.org ~/Documents/org/42_cc_01_born2beroot.org
