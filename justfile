@@ -4,7 +4,8 @@ root := justfile_directory()
 tag := `git describe --exact-match --tags HEAD`
 
 vm-path := root / "vm"
-vm-file := vm-path / "42-rocky.vdi"
+vm-name := "42-rocky"
+vm-file := vm-path / vm-name + ".vdi"
 
 build     := root / "build"
 dist      := root / "dist"
@@ -27,8 +28,8 @@ _step desc:
 _done name="":
     @if "{{name}}" != "" { print "{{bold}}{{green}}=== done: {{name}} ===\n{{reset}}" } else { print "{{bold}}{{green}}=== done ===\n{{reset}}" }
 
-
-vm-name := "42-rocky"
+default:
+    @just --list
 
 snapshot:
     VBoxManage snapshot {{vm-name}} take {{tag}}
@@ -57,6 +58,9 @@ build-dist:
     just sync-notes-from
     @just _done
 
+publish:
+    gh release create {{tag}} {{dist}}/turnin.tar.gz                                                                                                          
+    
 check file:
      shasum -c {{file}}
 
