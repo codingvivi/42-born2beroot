@@ -1,0 +1,469 @@
+* born2beroot
+:PROPERTIES:
+:ID:       e7a23e35-0ac4-408b-b2a8-955aaa68dc8b
+:END:
+#+title: 42-cc-01-born2beroot
+
+** TODO signature.txt
+*** TODO Generate the VM disk signature and commit it to the repo root
+**** TODO Locate the .vdi file for your VM
+**** TODO Generate its SHA1 checksum and save to signature.txt
+#+begin_src sh
+sha1sum <path/to/vm.vdi> > signature.txt
+#+end_src
+**** TODO Commit signature.txt to the root of the git repository
+*** TODO Verify signature.txt
+**** TODO Confirm signature.txt is at the root of the repo
+**** TODO Confirm the checksum in signature.txt matches the live .vdi file
+#+begin_src sh
+diff signature.txt <(sha1sum <path/to/vm.vdi>)
+#+end_src
+**** TODO Re-generate and recommit if the .vdi changes after configuration
+
+** TODO VM & OS Installation
+*** TODO Install latest stable Rocky Linux (no KDump required)
+**** TODO Download latest stable Rocky Linux ISO
+**** TODO Create VM in VirtualBox/UTM
+**** TODO Boot and install with no graphical environment (no X.org, Wayland, or equivalent)
+**** TODO Ensure SELinux is set to enforcing mode during install
+*** TODO Verify OS installation is clean
+**** TODO Confirm no graphical server is installed
+#+begin_src sh
+rpm -qa | grep -E "xorg|wayland"
+#+end_src
+**** TODO Confirm SELinux is running and enforcing at startup
+#+begin_src sh
+sestatus
+getenforce
+#+end_src
+
+** TODO Disk Partitioning (Encrypted LVM)
+*** TODO Set up at least 2 encrypted LVM partitions
+**** TODO Create /boot partition (unencrypted)
+**** TODO Create encrypted LVM volume group
+**** TODO Create logical volumes: root, swap, home, var, srv, tmp, var-log
+**** TODO Verify partitioning matches subject diagram
+*** TODO Verify partitioning is correct
+**** TODO Run lsblk and confirm structure
+#+begin_src sh
+lsblk
+#+end_src
+**** TODO Confirm encryption is active
+#+begin_src sh
+cryptsetup status <volume>
+#+end_src
+
+** TODO SELinux Configuration
+*** TODO Ensure SELinux is enforcing and adapted to project needs
+**** TODO Confirm /etc/selinux/config has SELINUX=enforcing
+#+begin_src sh
+cat /etc/selinux/config
+#+end_src
+**** TODO Label port 4242 as SSH type so SELinux allows it
+#+begin_src sh
+semanage port -a -t ssh_port_t -p tcp 4242
+#+end_src
+**** TODO Confirm no needed services are blocked by SELinux
+#+begin_src sh
+cat /var/log/audit/audit.log
+#+end_src
+**** TODO Set any required booleans (e.g. allow sudo logging paths)
+*** TODO Verify SELinux configuration
+**** TODO Confirm enforcing at runtime
+#+begin_src sh
+getenforce
+#+end_src
+**** TODO Confirm enforcing persists after reboot
+#+begin_src sh
+grep SELINUX= /etc/selinux/config
+#+end_src
+**** TODO No AVC denials blocking required functionality
+#+begin_src sh
+ausearch -m avc -ts recent
+#+end_src
+
+** TODO SSH Configuration
+*** TODO Configure SSH to run on port 4242 only
+**** TODO Edit /etc/ssh/sshd_config: set Port 4242 and disable root login
+#+begin_src sh
+# In /etc/ssh/sshd_config:
+# Port 4242
+# PermitRootLogin no
+#+end_src
+**** TODO Restart SSH service
+#+begin_src sh
+systemctl restart sshd
+#+end_src
+*** TODO Verify SSH configuration
+**** TODO Confirm SSH listens on port 4242
+#+begin_src sh
+ss -tlnp | grep 4242
+#+end_src
+**** TODO Confirm root login via SSH is rejected
+**** TODO Test connecting as a normal user via SSH on port 4242
+#+begin_src sh
+ssh -p 4242 <login>@<ip>
+#+end_src
+
+** TODO Firewall (firewalld)
+*** TODO Install and configure firewalld
+**** TODO Install firewalld if not present
+#+begin_src sh
+dnf install firewalld
+#+end_src
+**** TODO Enable and start firewalld
+#+begin_src sh
+systemctl enable --now firewalld
+#+end_src
+**** TODO Check what is currently open before making changes
+#+begin_src sh
+firewall-cmd --list-all
+#+end_src
+**** TODO Add port 4242 permanently and reload
+#+begin_src sh
+firewall-cmd --permanent --add-port=4242/tcp
+firewall-cmd --reload
+#+end_src
+**** TODO Tell SELinux that port 4242 is an SSH port
+#+begin_src sh
+semanage port -a -t ssh_port_t -p tcp 4242
+#+end_src
+*** TODO Verify firewalld configuration
+**** TODO Confirm firewalld is active
+#+begin_src sh
+firewall-cmd --state
+#+end_src
+**** TODO Confirm only port 4242 is open
+#+begin_src sh
+firewall-cmd --list-ports
+#+end_src
+**** TODO Confirm firewalld is active after reboot
+*** TODO Know how to add and remove a port live (eval will ask you to open 8080 then delete it)
+**** TODO Add port 8080 temporarily and verify
+#+begin_src sh
+firewall-cmd --permanent --add-port=8080/tcp
+firewall-cmd --reload
+firewall-cmd --list-ports
+#+end_src
+**** TODO Remove port 8080 and verify it's gone
+#+begin_src sh
+firewall-cmd --permanent --remove-port=8080/tcp
+firewall-cmd --reload
+firewall-cmd --list-ports
+#+end_src
+
+** TODO Hostname
+*** TODO Set hostname to <login>42
+**** TODO Set hostname via hostnamectl
+#+begin_src sh
+hostnamectl set-hostname <login>42
+#+end_src
+**** TODO Update /etc/hosts to reflect new hostname
+*** TODO Verify hostname
+**** TODO Confirm output is <login>42
+#+begin_src sh
+hostname
+#+end_src
+**** TODO Know how to change hostname, reboot, and verify it persists (eval does this)
+#+begin_src sh
+hostnamectl set-hostname <newname>
+# update /etc/hosts too, then:
+reboot
+# after reboot:
+hostname
+#+end_src
+**** TODO Know how to restore the original hostname afterwards
+
+** TODO Password Policy
+*** TODO Configure password aging in /etc/login.defs
+**** TODO Set PASS_MAX_DAYS 30, PASS_MIN_DAYS 2, PASS_WARN_AGE 7
+#+begin_src sh
+# In /etc/login.defs:
+# PASS_MAX_DAYS   30
+# PASS_MIN_DAYS   2
+# PASS_WARN_AGE   7
+#+end_src
+*** TODO Configure password complexity with pwquality
+**** TODO Install libpwquality if not present
+#+begin_src sh
+dnf install libpwquality
+#+end_src
+**** TODO Edit /etc/security/pwquality.conf to add complexity rules
+#+begin_src sh
+# In /etc/security/pwquality.conf:
+# minlen=10
+# ucredit=-1
+# lcredit=-1
+# dcredit=-1
+# maxrepeat=3
+# reject_username
+# difok=7
+# enforce_for_root
+#+end_src
+***** TODO minlen=10
+***** TODO ucredit=-1 (require uppercase)
+***** TODO lcredit=-1 (require lowercase)
+***** TODO dcredit=-1 (require digit)
+***** TODO maxrepeat=3 (no more than 3 consecutive identical chars)
+***** TODO reject_username (no username in password)
+***** TODO difok=7 (7 chars not in old password, applies to non-root)
+***** TODO enforce_for_root (root must also comply)
+*** TODO Change all existing account passwords to comply with policy
+**** TODO Change root password
+#+begin_src sh
+passwd root
+#+end_src
+**** TODO Change user password
+#+begin_src sh
+passwd <login>
+#+end_src
+*** TODO Verify password policy
+**** TODO Attempt a non-compliant password and confirm rejection
+**** TODO Confirm aging settings per user
+#+begin_src sh
+chage -l <user>
+#+end_src
+
+** TODO Sudo Configuration
+*** TODO Create /etc/sudoers.d/ drop-in config file for strict sudo rules
+**** TODO Limit authentication to 3 attempts
+**** TODO Set custom wrong-password message
+**** TODO Enable input/output logging to /var/log/sudo/
+**** TODO Enable TTY mode
+**** TODO Restrict sudo secure_path
+**** TODO Create /var/log/sudo/ directory and write the config file
+#+begin_src sh
+mkdir -p /var/log/sudo
+
+# Contents of /etc/sudoers.d/sudoconfig:
+# Defaults  passwd_tries=3
+# Defaults  badpass_message="Wrong password. Access denied."
+# Defaults  log_input, log_output
+# Defaults  iolog_dir="/var/log/sudo/"
+# Defaults  requiretty
+# Defaults  secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+#+end_src
+*** TODO Verify sudo configuration
+**** TODO Run a sudo command and confirm it logs to /var/log/sudo/
+#+begin_src sh
+ls /var/log/sudo/
+#+end_src
+**** TODO Enter wrong password 3 times and confirm lockout and custom message
+**** TODO Confirm TTY requirement is enforced
+
+** TODO User Management
+*** TODO Ensure root user is configured
+*** TODO Create user with login as username
+**** TODO Create the user (Rocky uses useradd, not adduser)
+#+begin_src sh
+useradd -m <login>
+#+end_src
+**** TODO Set the user's password
+#+begin_src sh
+passwd <login>
+#+end_src
+**** TODO Assign to wheel group for actual sudo access
+#+begin_src sh
+usermod -aG wheel <login>
+#+end_src
+**** TODO Create a group literally named "sudo" (eval checks for this by name) and add user to it
+#+begin_src sh
+groupadd sudo
+usermod -aG sudo <login>
+#+end_src
+**** TODO Create user42 group and assign user
+#+begin_src sh
+groupadd user42
+usermod -aG user42 <login>
+#+end_src
+*** TODO Verify user configuration
+**** TODO Confirm user exists and check group membership
+#+begin_src sh
+id <login>
+#+end_src
+**** TODO Confirm user is in wheel, sudo, and user42 groups
+**** TODO Note: on Rocky, wheel provides actual sudo access; "sudo" group satisfies the subject's naming requirement
+**** TODO Know how to create a new user and assign groups for peer review (eval does this live)
+#+begin_src sh
+useradd -m <newuser>
+passwd <newuser>
+groupadd <newgroup>
+usermod -aG <newgroup> <newuser>
+id <newuser>
+#+end_src
+**** TODO Know how to create the "evaluating" group and assign the new user to it (eval explicitly requests this)
+#+begin_src sh
+groupadd evaluating
+usermod -aG evaluating <newuser>
+id <newuser>
+#+end_src
+
+** TODO monitoring.sh Script
+*** TODO Write monitoring.sh in bash
+**** TODO Display OS architecture and kernel version
+#+begin_src sh
+uname -a
+#+end_src
+**** TODO Display number of physical CPUs
+#+begin_src sh
+grep "physical id" /proc/cpuinfo | sort -u | wc -l
+#+end_src
+**** TODO Display number of vCPUs
+#+begin_src sh
+grep "^processor" /proc/cpuinfo | wc -l
+#+end_src
+**** TODO Display RAM usage and percentage
+#+begin_src sh
+free -m
+#+end_src
+**** TODO Display disk usage and percentage
+#+begin_src sh
+df -BG
+#+end_src
+**** TODO Display CPU utilization percentage
+#+begin_src sh
+top -bn1 | grep "Cpu(s)"
+#+end_src
+**** TODO Display date and time of last reboot
+#+begin_src sh
+who -b
+#+end_src
+**** TODO Display whether LVM is active
+#+begin_src sh
+lsblk | grep lvm
+#+end_src
+**** TODO Display number of active TCP connections
+#+begin_src sh
+ss -t | grep ESTAB | wc -l
+#+end_src
+**** TODO Display number of logged-in users
+#+begin_src sh
+who | wc -l
+#+end_src
+**** TODO Display IPv4 address and MAC address
+#+begin_src sh
+hostname -I
+ip link show
+#+end_src
+**** TODO Display number of commands executed with sudo
+#+begin_src sh
+journalctl _COMM=sudo | grep COMMAND | wc -l
+#+end_src
+**** TODO Use wall to broadcast to all terminals and suppress errors
+#+begin_src sh
+wall "$(bash /path/to/monitoring.sh)" 2>/dev/null
+#+end_src
+*** TODO Schedule monitoring.sh with cron
+**** TODO Edit root crontab and add entry to run every 10 minutes
+#+begin_src sh
+crontab -e
+# add:
+# */10 * * * * bash /path/to/monitoring.sh
+#+end_src
+*** TODO Verify monitoring.sh
+**** TODO Run script manually and confirm all fields display correctly
+#+begin_src sh
+bash /path/to/monitoring.sh
+#+end_src
+**** TODO Confirm cron runs it every 10 minutes
+**** TODO Know how to change it to run every minute for the live eval demo
+#+begin_src sh
+crontab -e
+# change: */10 * * * * ...
+# to:    */1  * * * * ...
+#+end_src
+**** TODO Know how to stop the cron job without modifying the script (eval requires this)
+#+begin_src sh
+# Option 1: stop crond temporarily (script file is untouched)
+systemctl stop crond
+# Option 2: remove the cron entry without touching the script file
+crontab -e
+#+end_src
+**** TODO After stopping: reboot and verify script is untouched
+#+begin_src sh
+# After reboot, confirm:
+ls -l /path/to/monitoring.sh        # permissions unchanged
+cat /path/to/monitoring.sh          # content unchanged
+stat /path/to/monitoring.sh         # location unchanged
+#+end_src
+
+** TODO README.md
+*** TODO Write README.md at root of git repository
+**** TODO First line: italicized "This project has been created as part of the 42 curriculum by <login>."
+**** TODO Description section: project goal and overview
+**** TODO Instructions section: how to set up / run the VM
+**** TODO Resources section: references + AI usage description (which tasks, which parts)
+**** TODO OS choice section: explain choice of Rocky Linux, pros/cons
+**** TODO Comparison: Debian vs Rocky Linux
+**** TODO Comparison: AppArmor vs SELinux
+**** TODO Comparison: UFW vs firewalld
+**** TODO Comparison: VirtualBox vs UTM
+**** TODO Main design choices: partitioning, security policies, user management, services
+*** TODO Verify README.md
+**** TODO Confirm all required sections are present
+**** TODO Confirm first line is italicized
+**** TODO Have someone unfamiliar read it and confirm it's understandable
+
+** TODO Defense Preparation
+*** TODO Prepare verbal answers for project overview questions (eval checks these first)
+**** TODO Explain the basic functioning of your virtual machine
+**** TODO Explain your choice of Rocky Linux over Debian (pros/cons of each)
+**** TODO Explain the basic differences between Rocky and Debian
+**** TODO Explain the benefits of virtual machines in general
+**** TODO Explain what SELinux is and how it's configured in this project
+**** TODO Explain what DNF is (Rocky's package manager, successor to YUM)
+**** TODO Explain what SSH is and why it's important to use it
+**** TODO Explain what cron is and how the monitoring schedule is set up
+**** TODO Explain what sudo is, its purpose, and demonstrate usage with examples
+**** TODO Explain what LVM is, how it works, and why it's beneficial
+**** TODO Explain the purpose of the password policy and its advantages AND disadvantages (eval explicitly asks for both; "because the subject requires it" is not accepted)
+*** TODO Understand the OS
+**** TODO Know the differences between dnf and yum (yum is now a symlink to dnf on Rocky)
+**** TODO Know what SELinux is, its modes, and how to inspect it
+#+begin_src sh
+sestatus
+getenforce
+audit2why < /var/log/audit/audit.log
+#+end_src
+**** TODO Know how SELinux was configured for the project (port labeling, booleans used)
+#+begin_src sh
+semanage port -l | grep ssh
+getsebool -a
+#+end_src
+**** TODO Know what LVM is and how to inspect it
+#+begin_src sh
+lvdisplay
+vgdisplay
+pvdisplay
+#+end_src
+**** TODO Know what firewalld is and how to manage rules
+#+begin_src sh
+firewall-cmd --list-all
+firewall-cmd --state
+#+end_src
+*** TODO Practice peer review scenarios
+**** TODO Be able to change the VM hostname
+#+begin_src sh
+hostnamectl set-hostname <newname>
+# update /etc/hosts too
+#+end_src
+**** TODO Be able to create a new user and assign them to a group
+#+begin_src sh
+useradd -m <newuser>
+passwd <newuser>
+groupadd <newgroup>
+usermod -aG <newgroup> <newuser>
+#+end_src
+**** TODO Be able to explain monitoring.sh line by line
+**** TODO Be able to interrupt the monitoring cron without modifying the script
+#+begin_src sh
+systemctl stop crond
+# or comment out the cron entry:
+crontab -e
+#+end_src
+**** TODO Be able to add a new sudo rule or inspect current ones
+#+begin_src sh
+visudo
+# or inspect drop-in files:
+cat /etc/sudoers.d/*
+#+end_src
