@@ -1,3 +1,4 @@
+#/usr/bin/env bash
 PS4=$'\n+ '
 
 cp -v ./monitoring.sh /root/.local/bin
