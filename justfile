@@ -5,7 +5,7 @@ tag := `git describe --exact-match --tags HEAD`
 
 vm-path := root / "vm"
 vm-name := "42-rocky"
-vm-file := vm-path / vm-name + ".vdi"
+vm-file := vm-path / vm-name / vm-name + ".vdi"
 
 build     := root / "build"
 dist      := root / "dist"
@@ -36,7 +36,7 @@ snapshot:
 
 build-sig:
     mkdir -v {{build}}
-    cd {{build}}; shasum ../vm/42-rocky.vdi | save -f {{sig-file}}
+    cd {{build}}; shasum ../vm/42-rocky/42-rocky.vdi | save -f {{sig-file}}
 
 build-readme:
     rsync -v --mkpath README.md {{build}}/README.md
