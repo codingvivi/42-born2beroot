@@ -124,12 +124,14 @@ function	check_lvm()
 
 function	check_ssh()
 {
-	is_installed=$(sudo systemctl list-units 2>/dev/null | grep -o ssh)
-	ssh_port=$(sed -nE 's|^Port\s*([0-9]*).*|\1|p' /etc/ssh/sshd_config 2>/dev/null)
-	prohibit_root=$(sed -nE 's|^PermitRootLogin\s*(no).*|\1|p' /etc/ssh/sshd_config 2>/dev/null)
-	[ ${is_installed} ] && ssh_1=1 || ssh_1=0
-	[ "${ssh_port}" == 4242 ] && ssh_2=1 || ssh_2=0
-	[ ${prohibit_root} ] && ssh_3=1 || ssh_3=0
+	is_installed=$(sudo systemctl is-active sshd 2>/dev/null)
+	ssh_port=$(grep -hE '^Port\s' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf 2>/dev/null | \
+				sed -nE 's|^Port\s*([0-9]*).*|\1|p' | tail -n1)
+	prohibit_root=$(grep -hE '^PermitRootLogin\s' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf 2>/dev/null | \
+				sed -nE 's|^PermitRootLogin\s*(no).*|\1|p' | tail -n1)
+	[ "${is_installed}" == "active" ] && ssh_1=1 || ssh_1=0
+	[ "${ssh_port}" == "4242" ] && ssh_2=1 || ssh_2=0
+	[ "${prohibit_root}" ] && ssh_3=1 || ssh_3=0
 }
 
 function	check_hostname()
@@ -229,17 +231,18 @@ function	check_strong_password()
 
 function	check_strict_sudo()
 {
-	passwd_tries=$(sudo sed -nE 's|^Default.*passwd_tries=(3).*|\1|p' /etc/sudoers 2>/dev/null)
-	passwd_tries_2=$(sudo sed -nE 's|^Default.*(passwd_tries=).*|\1|p' /etc/sudoers 2>/dev/null)
-	passwd_message=$(sudo sed -nE 's|^Default.*badpass_message="(.+)".*|\1|p' /etc/sudoers 2>/dev/null)
-	passwd_message_2=$(sudo sed -nE 's|^Default.*(insults).*|\1|p' /etc/sudoers 2>/dev/null)
-	passwd_input=$(sudo sed -nE 's|^Default.*(log_input).*|\1|p' /etc/sudoers 2>/dev/null)
-	passwd_output=$(sudo sed -nE 's|^Default.*(log_output).*|\1|p' /etc/sudoers 2>/dev/null)
+	sudoers_content=$(sudo cat /etc/sudoers 2>/dev/null; sudo cat /etc/sudoers.d/* 2>/dev/null)
+	passwd_tries=$(echo "${sudoers_content}" | sed -nE 's|^Default.*passwd_tries=(3).*|\1|p')
+	passwd_tries_2=$(echo "${sudoers_content}" | sed -nE 's|^Default.*(passwd_tries=).*|\1|p')
+	passwd_message=$(echo "${sudoers_content}" | sed -nE 's|^Default.*badpass_message="(.+)".*|\1|p')
+	passwd_message_2=$(echo "${sudoers_content}" | sed -nE 's|^Default.*(insults).*|\1|p')
+	passwd_input=$(echo "${sudoers_content}" | sed -nE 's|^Default.*(log_input).*|\1|p')
+	passwd_output=$(echo "${sudoers_content}" | sed -nE 's|^Default.*(log_output).*|\1|p')
 	log_path="/var/log/sudo/sudo.log"
-	passwd_log=$(sudo sed -nE "s|^Default.*logfile=\"?(${log_path})\"?.*|\1|p" /etc/sudoers 2>/dev/null)
-	passwd_tty=$(sudo sed -nE 's|^Default.*(requiretty).*|\1|p' /etc/sudoers 2>/dev/null)
+	passwd_log=$(echo "${sudoers_content}" | sed -nE "s|^Default.*logfile=\"?(${log_path})\"?.*|\1|p")
+	passwd_tty=$(echo "${sudoers_content}" | sed -nE 's|^Default.*(requiretty).*|\1|p')
 	restricted_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
-	passwd_secure_path=$(sudo sed -nE "s|^Default.*(secure_path=\"?.+\"?).*|\1|p" /etc/sudoers 2>/dev/null)
+	passwd_secure_path=$(echo "${sudoers_content}" | sed -nE "s|^Default.*(secure_path=\"?.+\"?).*|\1|p")
 	if [ "${passwd_tries}" ]; then
 		sudo_1=1
 	elif [ ! "${passwd_tries_2}" ]; then
@@ -263,9 +266,9 @@ function	check_strict_sudo()
 
 function	check_username()
 {
-	username=$(cat /etc/passwd | grep -o ${LOGIN} | uniq)
-	have_sudo=$(id ${LOGIN} 2>/dev/null | grep -o sudo)
-	have_user42=$(id ${LOGIN} 2>/dev/null | grep -o user42)
+	username=$(grep -o "${LOGIN}" /etc/passwd | uniq)
+	have_sudo=$(id "${LOGIN}" 2>/dev/null | grep -oE 'sudo|wheel')
+	have_user42=$(id "${LOGIN}" 2>/dev/null | grep -o user42)
 	[ "${username}" == "${LOGIN}" ] && username_1=1 || username_1=0
 	[ "${have_sudo}" ] && username_2=1 || username_2=0
 	[ "${have_user42}" ] && username_3=1 || username_3=0
