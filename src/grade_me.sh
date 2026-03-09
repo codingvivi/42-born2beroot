@@ -242,7 +242,7 @@ function	check_strict_sudo()
 	passwd_log=$(echo "${sudoers_content}" | sed -nE "s|^Default.*logfile=\"?(${log_path})\"?.*|\1|p")
 	passwd_tty=$(echo "${sudoers_content}" | sed -nE 's|^Default.*(requiretty).*|\1|p')
 	restricted_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
-	passwd_secure_path=$(sudo sed -nE "s|^Default.*(secure_path=\"?.+\"?).*|\1|p" /etc/sudoers 2>/dev/null)
+	passwd_secure_path=$(echo "${sudoers_content}" | grep -oE 'secure_path[[:space:]]*=[[:space:]]*"?[^"[:space:]]+"?')
 	if [ "${passwd_tries}" ]; then
 		sudo_1=1
 	elif [ ! "${passwd_tries_2}" ]; then
