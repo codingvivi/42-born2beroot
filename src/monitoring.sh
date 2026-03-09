@@ -18,14 +18,11 @@ get_table_cell() {
 }
 
 kb_to_gb() {
-  local kb=$1
-  echo "scale=2; $kb / 1048576" | bc
+  awk "BEGIN {printf \"%.2f\", $1 / 1048576}"
 }
 
 percent() {
-  local part=$1
-  local total=$2
-  echo "scale=2; $part / $total * 100" | bc
+  awk "BEGIN {printf \"%.2f\", $1 / $2 * 100}"
 }
 
 get_gb() {
@@ -38,13 +35,13 @@ get_gb() {
 
 get_usage() {
   local table=$1 row=$2 total_col=$3 used_col=$4
-  used_gb=$(printf "%.2f" $(get_gb "$table" $row $used_col))
-  total_gb=$(printf "%.2f" $(get_gb "$table" $row $total_col))
+  used_gb=$(get_gb "$table" $row $used_col)
+  total_gb=$(get_gb "$table" $row $total_col)
 }
 
 
 get_usage "free" 2 2 3
-mem_msg="$used_gb/$total_gb GB ($(printf "%.2f" $(percent $used_gb $total_gb))%)"
+mem_msg="$used_gb/$total_gb GB ($(percent $used_gb $total_gb)%)"
 
 get_usage "df /" 2 2 3
 disk_percent=$(get_table_cell "df /" 2 5)
