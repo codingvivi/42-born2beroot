@@ -107,7 +107,7 @@ the tar and the rest of the tracked repo files can be published to github via
 | Firewall frontend | UFW | firewalld |
 | Default init | systemd | systemd |
 | Learning curve | Lower | Higher |
-| Learning auditing| Easier | Harder |
+| Auditing| Easier | Harder |
 | Community size | Very large | Smaller but growing |
 
 Debian is more beginner-friendly and better documented for general use.
@@ -188,17 +188,19 @@ and emulate x86 via QEMU at the cost of speed.
 
 #### OS
 
-I picked Rocky for the simple reason
-that at the point of choosing,
-I already had done 2 minimal/server installs
+Having already
+done 2 minimal/server installs
 of RPM based distributions,
-so I was hoping knowledge would be at least somewhat transferable.
+at the time of starting the project
+I picked Rocky
+hoping the knowledge would be at least somewhat transferable.
 
 Furthermore,
 I am a fan of OpenSUSE
 and knowledge of setting up a SEL & firewalld server came in in handy
 a bit after starting the project
-when during my free time I set up a personal file server
+when during my free time,
+I set up a personal file server
 using OpenSUSE Leap
 for my personal side buisness.
 
