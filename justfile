@@ -59,6 +59,7 @@ build-dist:
     @just _done
 
 publish:
+    just build-dist
     gh release create {{tag}} {{dist}}/turnin.tar.gz                                                                                                          
     
 check file:
