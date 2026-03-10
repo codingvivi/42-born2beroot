@@ -229,6 +229,10 @@ I took the liberty of installing
   for pulling the scripts I wrote on my personal machine
   into the vm
 
+Even though not explicitly asked for
+I disabled password login as soon as I copied my ssh key onto the machine,
+since this is standard pratice.
+
 ## Resources
 
 ### AI Usage

@@ -70,3 +70,8 @@ sync-notes-to:
 
 sync-notes-from:
     rsync -av ~/Documents/org/42_cc_01_born2beroot.org {{root}}/todo.org
+
+test:
+    #!/usr/bin/env bash
+    sudo bash {{root}}/tests/born2beroot-tester-rocky/grade_me.sh -u lrain -m /root/.local/bin
+    sudo bash {{root}}/tests/vrockychecc/tester.sh lrain 74eea0d3-8300-4a53-9df7-a66301776844

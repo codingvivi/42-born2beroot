@@ -4,5 +4,6 @@ dist/
 turnin/
 *.tar.gz
 ext/
+external/
 vm/
 vm_1/
