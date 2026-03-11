@@ -1,5 +1,4 @@
 root := justfile_directory()
-tag := `git describe --exact-match --tags HEAD`
 
 vm-path := root / "vm"
 vm-name := "42-rocky"
@@ -30,7 +29,7 @@ default:
     @just --list
 
 snapshot:
-    VBoxManage snapshot {{vm-name}} take {{tag}}
+    VBoxManage snapshot {{vm-name}} take `git describe --exact-match --tags HEAD`
 
 build-sig:
     mkdir -v {{build}}
@@ -59,7 +58,7 @@ build-dist:
 
 publish:
     just build-dist
-    gh release create {{tag}} {{dist}}/turnin.tar.gz                                                                                                          
+    gh release create `git describe --exact-match --tags HEAD` {{dist}}/turnin.tar.gz                                                                                                          
     
 check file:
      shasum -c {{file}}
