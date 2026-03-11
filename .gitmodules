@@ -1,6 +1,6 @@
 [submodule "tests/born2beroot-tester-rocky"]
 	path = tests/born2beroot-tester-rocky
-	url = git@github.com:codingvivi/Born2BeRootTester-RockyEdition.git
+	url = https://github.com/codingvivi/Born2BeRootTester-RockyEdition.git
 [submodule "tests/vrockychecc"]
 	path = tests/vrockychecc
 	url = https://github.com/codingvivi/born2beroot-Vrockychecc.git
