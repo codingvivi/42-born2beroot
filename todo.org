@@ -34,18 +34,20 @@ CLOSED: [2026-03-01 Sun 16:39]
 CLOSED: [2026-03-01 Sun 16:40]
 **** DONE Ensure SELinux is set to enforcing mode during install
 CLOSED: [2026-03-01 Sun 16:40]
-*** TODO Verify OS installation is clean
-**** TODO Confirm no graphical server is installed
+*** DONE Verify OS installation is clean
+**** DONE Confirm no graphical server is installed
+CLOSED: [2026-03-10 Tue 14:20]
 #+begin_src sh
-rpm -qa | grep -E "xorg|wayland"
+  rpm -qa | grep -iE "xorg|wayland"
 #+end_src
-**** TODO Confirm SELinux is running and enforcing at startup
+**** DONE Confirm SELinux is running and enforcing at startup
 #+begin_src sh
 sestatus
 getenforce
 #+end_src
 
-** TODO Disk Partitioning (Encrypted LVM)
+** DONE Disk Partitioning (Encrypted LVM)
+CLOSED: [2026-03-10 Tue 14:30]
 *** DONE Set up at least 2 encrypted LVM partitions
 CLOSED: [2026-03-01 Sun 17:03]
 **** DONE Create /boot partition (unencrypted)
@@ -56,16 +58,19 @@ CLOSED: [2026-03-01 Sun 16:41]
 CLOSED: [2026-03-01 Sun 16:42]
 **** DONE Verify partitioning matches subject diagram
 CLOSED: [2026-03-01 Sun 17:02]
-*** TODO Verify partitioning is correct
-**** TODO Run lsblk and confirm structure
-**** TODO Confirm encryption is active
+*** DONE Verify partitioning is correct
+CLOSED: [2026-03-10 Tue 14:30]
+**** DONE Run lsblk and confirm structure
+**** DONE Confirm encryption is active
 #+begin_src sh
 cryptsetup status <volume>
 #+end_src
 
 ** TODO SELinux Configuration
-*** TODO Ensure SELinux is working correctly
-**** TODO Confirm /etc/selinux/config has SELINUX=enforcing
+*** DONE Ensure SELinux is working correctly
+CLOSED: [2026-03-10 Tue 15:26]
+**** DONE Confirm /etc/selinux/config has SELINUX=enforcing
+CLOSED: [2026-03-10 Tue 14:41]
 #+begin_src sh
 cat /etc/selinux/config
 #+end_src
@@ -74,21 +79,27 @@ CLOSED: [2026-03-01 Sun 16:43]
 #+begin_src sh
 semanage port -a -t ssh_port_t -p tcp 4242
 #+end_src
-**** TODO Confirm no needed services are blocked by SELinux
+**** DONE Confirm no needed services are blocked by SELinux
+CLOSED: [2026-03-10 Tue 15:18]
 #+begin_src sh
 cat /var/log/audit/audit.log
 #+end_src
-**** TODO Set any required booleans (e.g. allow sudo logging paths)
-*** TODO Verify SELinux configuration
-**** TODO Confirm enforcing at runtime
+**** DONE Set any required booleans (e.g. allow sudo logging paths)
+CLOSED: [2026-03-10 Tue 15:18]
+*** DONE Verify SELinux configuration
+CLOSED: [2026-03-10 Tue 15:26]
+**** DONE Confirm enforcing at runtime
+CLOSED: [2026-03-10 Tue 15:19]
 #+begin_src sh
 getenforce
 #+end_src
-**** TODO Confirm enforcing persists after reboot
+**** DONE Confirm enforcing persists after reboot
+CLOSED: [2026-03-10 Tue 15:21]
 #+begin_src sh
 grep SELINUX= /etc/selinux/config
 #+end_src
-**** TODO No AVC denials blocking required functionality
+**** DONE No AVC denials blocking required functionality
+CLOSED: [2026-03-10 Tue 15:26]
 #+begin_src sh
 ausearch -m avc -ts recent
 #+end_src
@@ -108,18 +119,23 @@ CLOSED: [2026-03-01 Sun 16:58]
 #+begin_src sh
 systemctl restart sshd
 #+end_src
-*** TODO Verify SSH configuration
-**** TODO Confirm SSH listens on port 4242
+*** DONE Verify SSH configuration
+CLOSED: [2026-03-10 Tue 15:26]
+**** DONE Confirm SSH listens on port 4242
+CLOSED: [2026-03-10 Tue 15:26]
 #+begin_src sh
 ss -tlnp | grep 4242
 #+end_src
-**** TODO Confirm root login via SSH is rejected
-**** TODO Test connecting as a normal user via SSH on port 4242
+**** DONE Confirm root login via SSH is rejected
+CLOSED: [2026-03-10 Tue 15:26]
+**** DONE Test connecting as a normal user via SSH on port 4242
+CLOSED: [2026-03-10 Tue 15:26]
 #+begin_src sh
 ssh -p 4242 <login>@<ip>
 #+end_src
 
-** TODO Firewall (firewalld)
+** DONE Firewall (firewalld)
+CLOSED: [2026-03-10 Tue 15:28]
 *** DONE Install and configure firewalld
 CLOSED: [2026-03-01 Sun 17:04]
 **** DONE Enable and start firewalld
@@ -167,20 +183,26 @@ firewall-cmd --reload
 firewall-cmd --list-ports
 #+end_src
 
-** TODO Hostname
-*** TODO Set hostname to <login>42
+** DONE Hostname
+CLOSED: [2026-03-10 Tue 15:36]
+*** DONE Set hostname to <login>42
+CLOSED: [2026-03-10 Tue 15:36]
 **** DONE Set hostname via hostnamectl
 CLOSED: [2026-03-01 Sun 17:05]
 #+begin_src sh
 hostnamectl set-hostname <login>42
 #+end_src
-**** TODO Update /etc/hosts to reflect new hostname
-*** TODO Verify hostname
-**** TODO Confirm output is <login>42
+**** DONE Update /etc/hosts to reflect new hostname
+CLOSED: [2026-03-10 Tue 15:30]
+*** DONE Verify hostname
+CLOSED: [2026-03-10 Tue 15:36]
+**** DONE Confirm output is <login>42
+CLOSED: [2026-03-10 Tue 15:31]
 #+begin_src sh
 hostname
 #+end_src
-**** TODO Know how to change hostname, reboot, and verify it persists (eval does this)
+**** DONE Know how to change hostname, reboot, and verify it persists (eval does this)
+CLOSED: [2026-03-10 Tue 15:36]
 #+begin_src sh
 hostnamectl set-hostname <newname>
 # update /etc/hosts too, then:
@@ -188,7 +210,6 @@ reboot
 # after reboot:
 hostname
 #+end_src
-**** TODO Know how to restore the original hostname afterwards
 
 ** TODO Password Policy
 *** DONE Configure password aging in /etc/login.defs
@@ -201,8 +222,10 @@ CLOSED: [2026-03-01 Sun 17:08]
 # PASS_MIN_DAYS   2
 # PASS_WARN_AGE   7
 #+end_src
-*** TODO Configure password complexity with pwquality
-**** TODO Edit /etc/security/pwquality.conf to add complexity rules
+*** DONE Cnfigure password complexity with pwquality
+CLOSED: [2026-03-10 Tue 17:07]
+**** DONE Edit /etc/security/pwquality.conf to add complexity rules
+CLOSED: [2026-03-10 Tue 17:06]
 #+begin_src sh
 # In /etc/security/pwquality.conf:
 # minlen=10
@@ -213,31 +236,44 @@ CLOSED: [2026-03-01 Sun 17:08]
 # reject_username
 # difok=7
 # enforce_for_root
-#+end_src
-***** TODO minlen=10
-***** TODO ucredit=-1 (require uppercase)
-***** TODO lcredit=-1 (require lowercase)
-***** TODO dcredit=-1 (require digit)
-***** TODO maxrepeat=3 (no more than 3 consecutive identical chars)
-***** TODO reject_username (no username in password)
-***** TODO difok=7 (7 chars not in old password, applies to non-root)
-***** TODO enforce_for_root (root must also comply)
-*** TODO Change all existing account passwords to comply with policy
-**** TODO Change root password
+# #+end_src
+***** DONE minlen=10
+CLOSED: [2026-03-10 Tue 17:05]
+***** DONE ucredit=-1 (require uppercase)
+CLOSED: [2026-03-10 Tue 17:05]
+***** DONE lcredit=-1 (require lowercase)
+CLOSED: [2026-03-10 Tue 17:06]
+***** DONE dcredit=-1 (require digit)
+CLOSED: [2026-03-10 Tue 17:06]
+***** DONE maxrepeat=3 (no more than 3 consecutive identical chars)
+CLOSED: [2026-03-10 Tue 17:06]
+***** DONE reject_username (no username in password)
+CLOSED: [2026-03-10 Tue 17:06]
+***** DONE difok=7 (7 chars not in old password, applies to non-root)
+CLOSED: [2026-03-10 Tue 17:06]
+***** DONE enforce_for_root (root must also comply)
+CLOSED: [2026-03-10 Tue 17:06]
+*** DONE Change all existing account passwords to comply with policy
+CLOSED: [2026-03-10 Tue 17:06]
+**** DONE Change root password
+CLOSED: [2026-03-10 Tue 17:06]
 #+begin_src sh
 passwd root
 #+end_src
-**** TODO Change user password
+**** DONE Change user password
+CLOSED: [2026-03-10 Tue 17:06]
 #+begin_src sh
 passwd <login>
 #+end_src
-*** TODO Verify password policy
-**** TODO Attempt a non-compliant password and confirm rejection
-**** TODO Confirm aging settings per user
+*** DONE Verify password policy
+CLOSED: [2026-03-10 Tue 17:06]
+**** DONE Attempt a non-compliant password and confirm rejection
+CLOSED: [2026-03-10 Tue 17:06]
+**** DONE Confirm aging settings per user
+CLOSED: [2026-03-10 Tue 17:06]
 #+begin_src sh
 chage -l <user>
 #+end_src
-
 ** TODO Sudo Configuration
 *** TODO Create /etc/sudoers.d/ drop-in config file for strict sudo rules
 **** TODO Limit authentication to 3 attempts
@@ -260,16 +296,21 @@ mkdir -p /var/log/sudo
 # Defaults  iolog_dir="/var/log/sudo/"
 # Defaults  requiretty
 # Defaults  secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
-#+end_src
-*** TODO Verify sudo configuration
-**** TODO Run a sudo command and confirm it logs to /var/log/sudo/
+# #+end_src
+*** DONE Verify sudo configuration
+CLOSED: [2026-03-11 Wed 14:59]
+**** DONE Run a sudo command and confirm it logs to /var/log/sudo/
+CLOSED: [2026-03-11 Wed 14:59]
 #+begin_src sh
 ls /var/log/sudo/
 #+end_src
-**** TODO Enter wrong password 3 times and confirm lockout and custom message
-**** TODO Confirm TTY requirement is enforced
+**** DONE Enter wrong password 3 times and confirm lockout and custom message
+CLOSED: [2026-03-11 Wed 14:59]
+**** DONE Confirm TTY requirement is enforced
+CLOSED: [2026-03-11 Wed 14:59]
 ** TODO User Management
-*** TODO Ensure root user is configured
+*** DONE Ensure root user is configured
+CLOSED: [2026-03-11 Wed 14:59]
 *** DONE Create user with login as username
 CLOSED: [2026-03-01 Sun 17:21]
 **** DONE Create the user
@@ -294,13 +335,20 @@ groupadd user42
 usermod -aG user42 <login>
 #+end_src
 *** TODO Verify user configuration
-**** TODO Confirm user exists and check group membership
+CLOSED: [2026-03-11 Wed 14:53]
+**** DONE onfirm user exists and check group membership
 #+begin_src sh
 id <login>
 #+end_src
-**** TODO Confirm user is in wheel, sudo, and user42 groups
-**** TODO Note: on Rocky, wheel provides actual sudo access; "sudo" group satisfies the subject's naming requirement
-**** TODO Know how to create a new user and assign groups for peer review (eval does this live)
+**** DONE Confirm user is in wheel, sudo, and user42 groups
+CLOSED: [2026-03-11 Wed 14:55]
+**** DONE Know backup naming command
+CLOSED: [2026-03-11 Wed 14:56]
+#+begin_src sh
+  groupmod -n sudo wheel
+#+end_src
+**** DONE Know how to create a new user and assign groups for peer review (eval does this live)
+CLOSED: [2026-03-11 Wed 14:59]
 #+begin_src sh
 useradd -m <newuser>
 passwd <newuser>
@@ -308,7 +356,8 @@ groupadd <newgroup>
 usermod -aG <newgroup> <newuser>
 id <newuser>
 #+end_src
-**** TODO Know how to create the "evaluating" group and assign the new user to it (eval explicitly requests this)
+**** DONE Know how to create the "evaluating" group and assign the new user to it (eval explicitly requests this)
+CLOSED: [2026-03-11 Wed 14:59]
 #+begin_src sh
 groupadd evaluating
 usermod -aG evaluating <newuser>
@@ -343,32 +392,57 @@ CLOSED: [2026-03-05 Thu 15:27]
 CLOSED: [2026-03-05 Thu 15:27]
 **** DONE Use wall to broadcast to all terminals and suppress errors
 CLOSED: [2026-03-05 Thu 15:27]
-*** TODO Schedule monitoring.sh with cron
-**** TODO Edit root crontab and add entry to run every 10 minutes
-*** TODO Verify monitoring.sh
-**** TODO Check if you can get host cpus on vm
-**** TODO Run script manually and confirm all fields display correctly
-**** TODO Confirm cron runs it every 10 minutes
-**** TODO Know how to change it to run every minute for the live eval demo
-**** TODO Know how to stop the cron job without modifying the script (eval requires this)
-**** TODO After stopping: reboot and verify script is untouched
+*** DONE Schedule monitoring.sh with cron
+CLOSED: [2026-03-11 Wed 15:00]
+**** DONE Edit root crontab and add entry to run every 10 minutes
+CLOSED: [2026-03-11 Wed 15:00]
+*** DONE Verify monitoring.sh
+CLOSED: [2026-03-11 Wed 15:01]
+**** DONE Check if you can get host cpus on vm
+CLOSED: [2026-03-11 Wed 15:00]
+**** DONE Run script manually and confirm all fields display correctly
+CLOSED: [2026-03-11 Wed 15:00]
+**** DONE Confirm cron runs it every 10 minutes
+CLOSED: [2026-03-11 Wed 15:00]
+**** DONE Know how to change it to run every minute for the live eval demo
+CLOSED: [2026-03-11 Wed 15:00]
+**** DONE Know how to stop the cron job without modifying the script (eval requires this)
+CLOSED: [2026-03-11 Wed 15:00]
+**** KILL After stopping: reboot and verify script is untouched
+CLOSED: [2026-03-11 Wed 15:01]
 
+- State "KILL"       from "TODO"       [2026-03-11 Wed 15:01]
 ** TODO README.md
-*** TODO Write README.md at root of git repository
-**** TODO First line: italicized "This project has been created as part of the 42 curriculum by <login>."
-**** TODO Description section: project goal and overview
-**** TODO Instructions section: how to set up / run the VM
-**** TODO Resources section: references + AI usage description (which tasks, which parts)
-**** TODO OS choice section: explain choice of Rocky Linux, pros/cons
-**** TODO Comparison: Debian vs Rocky Linux
-**** TODO Comparison: AppArmor vs SELinux
-**** TODO Comparison: UFW vs firewalld
-**** TODO Comparison: VirtualBox vs UTM
-**** TODO Main design choices: partitioning, security policies, user management, services
-*** TODO Verify README.md
-**** TODO Confirm all required sections are present
-**** TODO Confirm first line is italicized
-**** TODO Have someone unfamiliar read it and confirm it's understandable
+*** DONE Write README.md at root of git repository
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE First line: italicized "This project has been created as part of the 42 curriculum by <login>."
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Description section: project goal and overview
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Instructions section: how to set up / run the VM
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Resources section: references + AI usage description (which tasks, which parts)
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE OS choice section: explain choice of Rocky Linux, pros/cons
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Comparison: Debian vs Rocky Linux
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Comparison: AppArmor vs SELinux
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Comparison: UFW vs firewalld
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Comparison: VirtualBox vs UTM
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Main design choices: partitioning, security policies, user management, services
+CLOSED: [2026-03-11 Wed 15:02]
+*** DONE Verify README.md
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Confirm all required sections are present
+CLOSED: [2026-03-11 Wed 15:02]
+**** DONE Confirm first line is italicized
+CLOSED: [2026-03-11 Wed 15:02]
+**** KILL Have someone unfamiliar read it and confirm it's understandable
+CLOSED: [2026-03-11 Wed 15:02]
 
 ** TODO Defense Preparation
 *** TODO Prepare verbal answers for project overview questions (eval checks these first)
@@ -430,6 +504,162 @@ crontab -e
 **** TODO Be able to add a new sudo rule or inspect current ones
 #+begin_src sh
 visudo
-# or inspect drop-in files:
 cat /etc/sudoers.d/*
+#+end_src
+
+*** TODO Defense Commands by Evaluation Section
+**** TODO Simple Configuration — verify OS, no GUI, services running
+#+begin_src sh
+cat /etc/os-release
+systemctl get-default
+systemctl status firewalld
+systemctl status sshd
+#+end_src
+
+**** TODO User — check your user's groups
+#+begin_src sh
+id lrain
+getent group sudo
+getent group user42
+getent group wheel
+#+end_src
+
+**** TODO User — create new user with compliant password (eval does this live)
+#+begin_src sh
+useradd -m <newuser>
+passwd <newuser>
+chage -l <newuser>
+#+end_src
+
+**** TODO User — show password policy config files
+#+begin_src sh
+grep -E "PASS_MAX_DAYS|PASS_MIN_DAYS|PASS_WARN_AGE" /etc/login.defs
+cat /etc/security/pwquality.conf
+#+end_src
+
+**** TODO User — create evaluating group and assign new user (eval asks this live)
+#+begin_src sh
+groupadd evaluating
+usermod -aG evaluating <newuser>
+id <newuser>
+#+end_src
+
+**** TODO Hostname — check, change, reboot, restore
+#+begin_src sh
+hostname
+hostnamectl
+hostnamectl set-hostname <newname>
+nano /etc/hosts
+reboot
+hostname
+hostnamectl set-hostname lrain42
+nano /etc/hosts
+#+end_src
+
+**** TODO Partitions — display partition layout
+#+begin_src sh
+lsblk
+lsblk -f
+#+end_src
+
+**** TODO Partitions — inspect LVM
+#+begin_src sh
+lvdisplay
+vgdisplay
+pvdisplay
+#+end_src
+
+**** TODO SUDO — verify sudo is installed
+#+begin_src sh
+which sudo
+sudo --version
+#+end_src
+
+**** TODO SUDO — add new user to sudo group (eval asks this live)
+#+begin_src sh
+usermod -aG wheel <newuser>
+id <newuser>
+#+end_src
+
+**** TODO SUDO — show sudo rules
+#+begin_src sh
+cat /etc/sudoers.d/sudoconfig
+visudo -c
+#+end_src
+
+**** TODO SUDO — verify /var/log/sudo/ logs update after a sudo command
+#+begin_src sh
+ls /var/log/sudo/
+sudo ls /tmp
+ls /var/log/sudo/
+ls /var/log/sudo/*/
+#+end_src
+
+**** TODO Firewalld — verify installed and running
+#+begin_src sh
+which firewall-cmd
+systemctl status firewalld
+firewall-cmd --state
+firewall-cmd --list-all
+firewall-cmd --list-ports
+#+end_src
+
+**** TODO Firewalld — add port 8080, verify, then remove (eval does this live)
+#+begin_src sh
+firewall-cmd --permanent --add-port=8080/tcp
+firewall-cmd --reload
+firewall-cmd --list-ports
+firewall-cmd --permanent --remove-port=8080/tcp
+firewall-cmd --reload
+firewall-cmd --list-ports
+#+end_src
+
+**** TODO SSH — verify installed and running
+#+begin_src sh
+which sshd
+systemctl status sshd
+ss -tlnp | grep 4242
+grep -E "^Port|^PermitRootLogin" /etc/ssh/sshd_config
+#+end_src
+
+**** TODO SSH — connect as new user, verify root is denied
+#+begin_src sh
+ssh -p 4242 <newuser>@<ip>
+ssh -p 4242 root@<ip>
+#+end_src
+
+**** TODO SELinux — verify enforcing
+#+begin_src sh
+sestatus
+getenforce
+grep SELINUX= /etc/selinux/config
+semanage port -l | grep ssh
+#+end_src
+
+**** TODO Cron — show current schedule and monitoring script
+#+begin_src sh
+crontab -l
+cat /root/.local/bin/monitoring.sh
+#+end_src
+
+**** TODO Cron — change to every minute (eval asks this live)
+#+begin_src sh
+crontab -e
+#+end_src
+Change ~*/10 * * * *~ to ~* * * * *~
+: minute | hour | day of month | month | day of week
+: ~*/10 * * * *~ = every 10 minutes
+: ~* * * * *~    = every minute
+: ~0 */10 * * *~ = every 10 hours (at minute 0)
+
+**** TODO Cron — stop script from running without modifying it (eval asks this live)
+#+begin_src sh
+systemctl stop crond
+#+end_src
+
+**** TODO Cron — after reboot verify script is unchanged
+#+begin_src sh
+cat /root/.local/bin/monitoring.sh
+stat /root/.local/bin/monitoring.sh
+ls -la /root/.local/bin/monitoring.sh
 #+end_src
