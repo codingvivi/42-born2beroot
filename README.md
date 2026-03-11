@@ -49,7 +49,14 @@ To evaluate my project (or one using my folder structure):
 - From the subfolder root, verify the disk signature:
   ```sh
   cd <subfolder-name>
-  shasum -c Signature.txt
+  just check signature.txt
+  ```
+  Or manually:
+  ```sh
+  cp signature.txt vm/42-rocky/signature.txt
+  cd vm/42-rocky
+  shasum -c signature.txt
+  rm signature.txt
   ```
 
 ### Running the test battery
@@ -62,12 +69,11 @@ Both testers must be run **on the VM**.
 Clone the repo onto the VM, then:
 
 ```sh
-git submodule update --init --recursive
-bash install-just.sh
+bash install-optional-eval-deps.sh
 ./external/just test
 ```
 
-`install-just.sh` installs `just` into `external/` without requiring root or a package manager.
+`install-optional-eval-deps.sh` installs `just` into `external/` and initialises the test submodules, without requiring root or a package manager.
 `just test` runs both testers — the third-party `grade_me.sh` and the Rocky-specific `tester.sh`.
 
 ### Building a submittable release
@@ -98,10 +104,10 @@ just build-dist
 
 This will
 
-- create the signature
+- generate the signature from within the vm directory (for portability)
 - copy it and the readme into an isolated folder,
   suitable to be used as a folder to push the project submission from
-- check if the checksum in it is valid
+- verify the checksum by running the check from the same vm directory
 - create a `tar.gz` of the submission files and move them to the `dist/` folder
 - create the evaluation-allowed snapshot of the current vm’s state named after the current git tag
 - sync my notes (since technically they are part of this repo’s `source code` which is included in github releases)

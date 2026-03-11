@@ -1,13 +1,15 @@
 root := justfile_directory()
 
-vm-path := root / "vm"
+vm-root:= root / "vm"
 vm-name := "42-rocky"
-vm-file := vm-path / vm-name / vm-name + ".vdi"
+vm-data := vm-root / vm-name 
+vm-file := vm-name + ".vdi"
 
 build     := root / "build"
 dist      := root / "dist"
 vm-dist   := build / "rocky.vdi"
 turnin    := root / "turnin"
+
 sig-file  := "signature.txt"
 
 reset  := '\e[0m'
@@ -32,11 +34,13 @@ _done name="":
 snapshot:
     VBoxManage snapshot {{vm-name}} take `git describe --exact-match --tags HEAD`
 
+# build signature
 build-sig:
     #!/usr/bin/env nu
+    cd {{vm-data}}; shasum {{vm-file}} | save -f {{sig-file}}
     mkdir -v {{build}}
-    cd {{build}}; shasum ../vm/42-rocky/42-rocky.vdi | save -f {{sig-file}}
-
+    mv {{vm-data}}/{{sig-file}} {{build}}/{{sig-file}}
+    
 build-readme:
     rsync -v --mkpath README.md {{build}}/README.md
 
@@ -44,14 +48,18 @@ build-all:
     just build-sig
     just build-readme
 
+
 build-dist:
     #!/usr/bin/env nu
     just build-all
     #copy files to be turned in
     rsync -av --mkpath {{build}}/ {{turnin}}/
     # check if shasum is ok
-    cd {{turnin}}; just check {{sig-file}}
+    just check {{turnin}}/{{sig-file}}
+    # compress release
     tar -czf {{root}}/turnin.tar.gz -C {{root}} turnin
+    # move files to dist
+    mkdir {{dist}}
     mv {{root}}/turnin.tar.gz {{dist}}/
     just snapshot
     just sync-notes-from
@@ -61,8 +69,11 @@ publish:
     just build-dist
     gh release create `git describe --exact-match --tags HEAD` {{dist}}/turnin.tar.gz                                                                                                          
     
-check file:
-     shasum -c {{file}}
+check sig:
+    #!/usr/bin/env nu
+    cp {{sig}} {{vm-data}}/{{sig-file}}
+    cd {{vm-data}}; shasum -c {{sig-file}}
+    rm {{vm-data}}/{{sig-file}}
 
 sync-notes-to:
     rsync -av {{root}}/todo.org ~/Documents/org/42_cc_01_born2beroot.org
