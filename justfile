@@ -37,7 +37,7 @@ snapshot:
 # build signature
 build-sig:
     #!/usr/bin/env nu
-    cd {{vm-data}}; shasum {{vm-file}} | save -f {{sig-file}}
+    cd {{vm-data}}; sha1sum {{vm-file}} | save -f {{sig-file}}
     mkdir -v {{build}}
     mv {{vm-data}}/{{sig-file}} {{build}}/{{sig-file}}
     
@@ -72,7 +72,7 @@ publish:
 check sig:
     #!/usr/bin/env nu
     cp {{sig}} {{vm-data}}/{{sig-file}}
-    cd {{vm-data}}; shasum -c {{sig-file}}
+    cd {{vm-data}}; sha1sum -c {{sig-file}}
     rm {{vm-data}}/{{sig-file}}
 
 sync-notes-to:
