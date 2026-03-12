@@ -1,8 +1,8 @@
 root := justfile_directory()
 
 vm-root:= root / "vm"
-vm-name := "42-rocky"
-vm-data := vm-root / vm-name 
+vm-name := "42-rocky-v2"
+vm-data := vm-root / vm-name
 vm-file := vm-name + ".vdi"
 
 build     := root / "build"
@@ -11,6 +11,8 @@ vm-dist   := build / "rocky.vdi"
 turnin    := root / "turnin"
 
 sig-file  := "signature.txt"
+
+backup-dir := "/home/musicvivireal/Temp/born2beroot-backups"
 
 reset  := '\e[0m'
 bold   := '\e[1m'
@@ -30,6 +32,15 @@ _step desc:
 _done name="":
     @if "{{name}}" != "" { print "{{bold}}{{green}}=== done: {{name}} ===\n{{reset}}" } else { print "{{bold}}{{green}}=== done ===\n{{reset}}" }
 
+
+# backup entire vm/ folder to ~/Temp/born2beroot-backups (VM must be powered off)
+backup:
+    #!/usr/bin/env bash
+    mkdir -p {{backup-dir}}
+    dest="{{backup-dir}}/vm-$(date +%Y%m%d-%H%M%S)"
+    echo "Backing up {{vm-root}} -> $dest"
+    cp -vr "{{vm-root}}" "$dest"
+    echo "Done: $dest"
 
 snapshot:
     VBoxManage snapshot {{vm-name}} take `git describe --exact-match --tags HEAD`
@@ -61,7 +72,7 @@ build-dist:
     # move files to dist
     mkdir {{dist}}
     mv {{root}}/turnin.tar.gz {{dist}}/
-    just snapshot
+    just backup
     just sync-notes-from
     #just _done
 
@@ -69,11 +80,17 @@ publish:
     just build-dist
     gh release create `git describe --exact-match --tags HEAD` {{dist}}/turnin.tar.gz                                                                                                          
     
+
 check sig:
     #!/usr/bin/env nu
     cp {{sig}} {{vm-data}}/{{sig-file}}
     cd {{vm-data}}; sha1sum -c {{sig-file}}
     rm {{vm-data}}/{{sig-file}}
+
+recheck :
+    rm -rf {{root}}/turnin/
+    tar xvf {{dist}}/turnin.tar.gz -C {{root}}
+    just check {{root}}/turnin/signature.txt
 
 sync-notes-to:
     rsync -av {{root}}/todo.org ~/Documents/org/42_cc_01_born2beroot.org

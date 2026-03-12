@@ -1,4 +1,5 @@
 .git-old
+*.pdf
 build/
 dist/
 turnin/
