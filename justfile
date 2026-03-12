@@ -1,14 +1,18 @@
-root := justfile_directory()
+proj-root := justfile_directory()
 
-vm-root:= root / "vm"
+src-path := proj-root / "src"
+monitor-script := "monitoring.sh"
+install-path := "/root/.local/bin/"
+
+vm-root:= proj-root / "vm"
 vm-name := "42-rocky-v2"
 vm-data := vm-root / vm-name
 vm-file := vm-name + ".vdi"
 
-build     := root / "build"
-dist      := root / "dist"
+build     := proj-root / "build"
+dist      := proj-root / "dist"
 vm-dist   := build / "rocky.vdi"
-turnin    := root / "turnin"
+turnin    := proj-root / "turnin"
 
 sig-file  := "signature.txt"
 
@@ -20,7 +24,7 @@ blue   := '\e[34m'
 green  := '\e[92m'
 yellow := '\e[33m'
 
-default:
+_default:
     @just --list
 
 _header name:
@@ -68,10 +72,10 @@ build-dist:
     # check if shasum is ok
     just check {{turnin}}/{{sig-file}}
     # compress release
-    tar -czf {{root}}/turnin.tar.gz -C {{root}} turnin
+    tar -czf {{proj-root}}/turnin.tar.gz -C {{proj-root}} turnin
     # move files to dist
     mkdir {{dist}}
-    mv {{root}}/turnin.tar.gz {{dist}}/
+    mv {{proj-root}}/turnin.tar.gz {{dist}}/
     just backup
     just sync-notes-from
     #just _done
@@ -88,19 +92,24 @@ check sig:
     rm {{vm-data}}/{{sig-file}}
 
 recheck :
-    rm -rf {{root}}/turnin/
-    tar xvf {{dist}}/turnin.tar.gz -C {{root}}
-    just check {{root}}/turnin/signature.txt
+    rm -rf {{proj-root}}/turnin/
+    tar xvf {{dist}}/turnin.tar.gz -C {{proj-root}}
+    just check {{proj-root}}/turnin/signature.txt
 
 sync-notes-to:
-    rsync -av {{root}}/todo.org ~/Documents/org/42_cc_01_born2beroot.org
+    rsync -av {{proj-root}}/todo.org ~/Documents/org/42_cc_01_born2beroot.org
 
 sync-notes-from:
-    rsync -av ~/Documents/org/42_cc_01_born2beroot.org {{root}}/todo.org
+    rsync -av ~/Documents/org/42_cc_01_born2beroot.org {{proj-root}}/todo.org
 
 test:
-    cd {{root}}/tests/born2beroot-tester-rocky && sudo bash grade_me.sh -u lrain -m /root/.local/bin/monitoring.sh
-    cd {{root}}/tests/vrockychecc && sudo bash tester.sh lrain luks/74eea0d3-8300-4a53-9df7-a66301776844
+    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash grade_me.sh -u lrain -m /root/.local/bin/monitoring.sh
+    cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh lrain luks/74eea0d3-8300-4a53-9df7-a66301776844
+
+install-monitoring:
+    mkdir -pv {{install-path}}
+    cp -v {{src-path}}/{{monitor-script}} {{install-path}}/{{monitor-script}}
+    chmod -v +x {{install-path}}/{{monitor-script}}
 
 clean:
     rm -rf {{build}} {{turnin}}

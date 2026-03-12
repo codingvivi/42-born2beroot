@@ -1,6 +1,7 @@
 #/usr/bin/env bash
 PS4=$'\n+ '
 
+
 cp -v ./monitoring.sh /root/.local/bin
 
 chmod -v +x /root/.local/bin/monitoring.sh
