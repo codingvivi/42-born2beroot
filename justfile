@@ -48,7 +48,7 @@ test-all:
     just test-own
 
 test-fork:
-    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash grade_me.sh -u lrain -m /root/.local/bin/monitoring.sh
+    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash ./tester.sh --login lrain --sudo-log /var/log/sudo/sudo.log  --pwquality /etc/security/pwqualit        y.conf.d/99-custom.conf
 
 test-own:    
     cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh lrain luks/74eea0d3-8300-4a53-9df7-a66301776844
