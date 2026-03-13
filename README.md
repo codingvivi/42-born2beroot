@@ -83,8 +83,9 @@ Mirroring my build environment requires:
 - `tar` (which on rocky isn't preinstalled, on most other ones where you would want to build it prolly is though)
 - [`just`](https://github.com/casey/just)
 - [`nushell`](https://www.nushell.sh/)
-- [`gh`](https://cli.github.com/)
+- [`gh`](https://cli.github.com/) optionally, for publishing to github
 
+#### Overwiew
 For an overview of all my `just` recipes simply run `just`
 
 ```
@@ -123,14 +124,11 @@ Available recipes:
     backup             # backup entire vm/ folder to ~/Temp/born2beroot-backups (VM must be powered off)
     snapshot name      # take a named VirtualBox snapshot
 ```
+#### Creating a release
 
-Creating a version to be submitted consists of creating a git tag first
 
-```sh
-   git tag <tag> -m "description"
-```
-
-and then running
+First,
+run just with
 
 ```sh
 just build-dist
@@ -146,22 +144,20 @@ This will
 - back up the vm folder
 - sync my notes (since technically they are part of this repo’s `source code` which is included in github releases)
 
-Then publish the release to GitHub:
+If it completes without hickups,
+The files are ready for turnin.
 
+##### Creating a github release 
+For a github release,
+after running `just dist` successfully,
+create a git tag,
+push it, 
+and then publish the turnin tar
 ```sh
+git tag <tag> -m "description"
+git push origin <tag>
 gh release create <tag> dist/turnin.tar.gz
 ```
-
-Tags can be created and managed with:
-
-```sh
-git tag <tag> -m "description"       # create annotated tag
-git tag                               # list tags
-git tag -d <tag>                      # delete tag locally
-git push origin <tag>                 # push tag to remote
-git push origin --delete <tag>        # delete tag on remote
-```
-
 
 ## Project description
 
