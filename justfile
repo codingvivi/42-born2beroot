@@ -43,8 +43,14 @@ publish:
     just build-dist
     gh release create `git describe --exact-match --tags HEAD` {{dist}}/turnin.tar.gz
 
-test:
+test-all:
+    just test-fork
+    just test-own
+
+test-fork:
     cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash grade_me.sh -u lrain -m /root/.local/bin/monitoring.sh
+
+test-own:    
     cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh lrain luks/74eea0d3-8300-4a53-9df7-a66301776844
 
 install-monitoring:
