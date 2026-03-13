@@ -43,16 +43,6 @@ publish:
     just build-dist
     gh release create `git describe --exact-match --tags HEAD` {{dist}}/turnin.tar.gz
 
-test-all:
-    just test-fork
-    just test-own
-
-test-fork:
-    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash ./grade_me.sh -u lrain -m {{install-path}}/{{monitor-script}}
-
-test-own:    
-    cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh --login lrain --sudo-log /var/log/sudo/sudo.log --pwquality /etc/security/pwquality.conf.d/99-custom.conf
-
 install-monitoring:
     mkdir -pv {{install-path}}
     cp -v {{src-path}}/{{monitor-script}} {{install-path}}/{{monitor-script}}
@@ -128,6 +118,17 @@ sync-notes-to:
 
 sync-notes-from:
     rsync -av ~/Documents/org/42_cc_01_born2beroot.org {{proj-root}}/todo.org
+
+
+test-all:
+    just test-fork
+    just test-own
+
+test-fork:
+    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash ./grade_me.sh -u lrain -m {{install-path}}/{{monitor-script}}
+
+test-own:    
+    cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh  --login lrain --sudo-log /var/log/sudo/sudo.log --pwquality /etc/security/pwquality.conf.d/99-custom.conf --cronfile /etc/cron.d/monitoring
 
 
 # cleanup
