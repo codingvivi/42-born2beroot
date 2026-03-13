@@ -6,7 +6,7 @@ install-path := "/usr/local/sbin/"
 
 vm-root:= proj-root / "vm"
 vm-name := "42-rocky-v2"
-vm-data := vm-root
+vm-data := vm-root / vm-name 
 vm-file := vm-name + ".vdi"
 
 build     := proj-root / "build"
@@ -90,9 +90,9 @@ build-all:
 [group('build')]
 build-sig:
     #!/usr/bin/env nu
-    cd {{vm-data}}; sha1sum {{vm-file}} | save -f {{sig-file}}
+    cd {{vm-root}}; sha1sum {{vm-file}} | save -f {{sig-file}}
     mkdir -v {{build}}
-    mv -v {{vm-data}}/{{sig-file}} {{build}}/{{sig-file}}
+    mv -v {{vm-root}}/{{sig-file}} {{build}}/{{sig-file}}
 
 # copy readme into build/
 [group('build')]
@@ -111,9 +111,9 @@ publish:
 [group('verification')]
 check sig:
     #!/usr/bin/env nu
-    cp {{sig}} {{vm-data}}/{{sig-file}}
-    cd {{vm-data}}; sha1sum -c {{sig-file}}
-    rm {{vm-data}}/{{sig-file}}
+    cp {{sig}} {{vm-root}}/{{sig-file}}
+    cd {{vm-root}}; sha1sum -c {{sig-file}}
+    rm {{vm-root}}/{{sig-file}}
 
 # re-extract turnin.tar.gz and verify
 [group('verification')]
