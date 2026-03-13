@@ -2,7 +2,7 @@ proj-root := justfile_directory()
 
 src-path := proj-root / "src"
 monitor-script := "monitoring.sh"
-install-path := "/root/.local/bin/"
+install-path := "/usr/local/sbin/"
 
 vm-root:= proj-root / "vm"
 vm-name := "42-rocky-v2"
@@ -37,32 +37,23 @@ _done name="":
     @if "{{name}}" != "" { print "{{bold}}{{green}}=== done: {{name}} ===\n{{reset}}" } else { print "{{bold}}{{green}}=== done ===\n{{reset}}" }
 
 
-# backup entire vm/ folder to ~/Temp/born2beroot-backups (VM must be powered off)
-backup:
-    #!/usr/bin/env bash
-    mkdir -p {{backup-dir}}
-    dest="{{backup-dir}}/vm-$(date +%Y%m%d-%H%M%S)"
-    echo "Backing up {{vm-root}} -> $dest"
-    cp -vr "{{vm-root}}" "$dest"
-    echo "Done: $dest"
+# entry points
 
-snapshot:
-    VBoxManage snapshot {{vm-name}} take `git describe --exact-match --tags HEAD`
+publish:
+    just build-dist
+    gh release create `git describe --exact-match --tags HEAD` {{dist}}/turnin.tar.gz
 
-# build signature
-build-sig:
-    #!/usr/bin/env nu
-    cd {{vm-data}}; sha1sum {{vm-file}} | save -f {{sig-file}}
-    mkdir -v {{build}}
-    mv {{vm-data}}/{{sig-file}} {{build}}/{{sig-file}}
-    
-build-readme:
-    rsync -v --mkpath README.md {{build}}/README.md
+test:
+    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash grade_me.sh -u lrain -m /root/.local/bin/monitoring.sh
+    cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh lrain luks/74eea0d3-8300-4a53-9df7-a66301776844
 
-build-all:
-    just build-sig
-    just build-readme
+install-monitoring:
+    mkdir -pv {{install-path}}
+    cp -v {{src-path}}/{{monitor-script}} {{install-path}}/{{monitor-script}}
+    chmod -v +x {{install-path}}/{{monitor-script}}
 
+
+# build pipeline
 
 build-dist:
     #!/usr/bin/env nu
@@ -80,10 +71,22 @@ build-dist:
     just sync-notes-from
     #just _done
 
-publish:
-    just build-dist
-    gh release create `git describe --exact-match --tags HEAD` {{dist}}/turnin.tar.gz                                                                                                          
-    
+build-all:
+    just build-sig
+    just build-readme
+
+# build signature
+build-sig:
+    #!/usr/bin/env nu
+    cd {{vm-data}}; sha1sum {{vm-file}} | save -f {{sig-file}}
+    mkdir -v {{build}}
+    mv {{vm-data}}/{{sig-file}} {{build}}/{{sig-file}}
+
+build-readme:
+    rsync -v --mkpath README.md {{build}}/README.md
+
+
+# verification
 
 check sig:
     #!/usr/bin/env nu
@@ -91,10 +94,28 @@ check sig:
     cd {{vm-data}}; sha1sum -c {{sig-file}}
     rm {{vm-data}}/{{sig-file}}
 
-recheck :
+recheck:
     rm -rf {{proj-root}}/turnin/
     tar xvf {{dist}}/turnin.tar.gz -C {{proj-root}}
     just check {{proj-root}}/turnin/signature.txt
+
+
+# vm
+
+snapshot:
+    VBoxManage snapshot {{vm-name}} take `git describe --exact-match --tags HEAD`
+
+# backup entire vm/ folder to ~/Temp/born2beroot-backups (VM must be powered off)
+backup:
+    #!/usr/bin/env bash
+    mkdir -p {{backup-dir}}
+    dest="{{backup-dir}}/vm-$(date +%Y%m%d-%H%M%S)"
+    echo "Backing up {{vm-root}} -> $dest"
+    cp -vr "{{vm-root}}" "$dest"
+    echo "Done: $dest"
+
+
+# notes
 
 sync-notes-to:
     rsync -av {{proj-root}}/todo.org ~/Documents/org/42_cc_01_born2beroot.org
@@ -102,14 +123,8 @@ sync-notes-to:
 sync-notes-from:
     rsync -av ~/Documents/org/42_cc_01_born2beroot.org {{proj-root}}/todo.org
 
-test:
-    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash grade_me.sh -u lrain -m /root/.local/bin/monitoring.sh
-    cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh lrain luks/74eea0d3-8300-4a53-9df7-a66301776844
 
-install-monitoring:
-    mkdir -pv {{install-path}}
-    cp -v {{src-path}}/{{monitor-script}} {{install-path}}/{{monitor-script}}
-    chmod -v +x {{install-path}}/{{monitor-script}}
+# cleanup
 
 clean:
     rm -rf {{build}} {{turnin}}
