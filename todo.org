@@ -133,6 +133,31 @@ CLOSED: [2026-03-10 Tue 15:26]
 #+begin_src sh
 ssh -p 4242 <login>@<ip>
 #+end_src
+**** DONE Copy SSH public key to VM to enable key-based login
+CLOSED: [2026-03-10 Tue 15:26]
+On the client machine, generate a key if you don't have one:
+#+begin_src sh
+ssh-keygen -t ed25519
+#+end_src
+Then copy your public key to the VM:
+#+begin_src sh
+ssh-copy-id -p 4242 <login>@<ip>
+#+end_src
+This appends ~~/.ssh/id_ed25519.pub~ to ~~/.ssh/authorized_keys~ on the VM.
+Or manually, if ~ssh-copy-id~ isn't available:
+On the guest:
+#+begin_src sh
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+#+end_src
+On the client:
+#+begin_src sh
+cat ~/.ssh/id_ed25519.pub | ssh -p 4242 <login>@<ip> "cat >> ~/.ssh/authorized_keys"
+#+end_src
+Verify it works (should not prompt for password):
+#+begin_src sh
+ssh -p 4242 <login>@<ip>
+#+end_src
 
 ** DONE Firewall (firewalld)
 CLOSED: [2026-03-10 Tue 15:28]
@@ -265,6 +290,12 @@ CLOSED: [2026-03-10 Tue 17:06]
 #+begin_src sh
 passwd <login>
 #+end_src
+**** DONE Apply aging settings to existing users (login.defs only affects new users)
+CLOSED: [2026-03-10 Tue 17:06]
+#+begin_src sh
+chage -M 30 -m 2 -W 7 <login>
+chage -M 30 -m 2 -W 7 root
+#+end_src
 *** DONE Verify password policy
 CLOSED: [2026-03-10 Tue 17:06]
 **** DONE Attempt a non-compliant password and confirm rejection
@@ -394,8 +425,12 @@ CLOSED: [2026-03-05 Thu 15:27]
 CLOSED: [2026-03-05 Thu 15:27]
 *** DONE Schedule monitoring.sh with cron
 CLOSED: [2026-03-11 Wed 15:00]
-**** DONE Edit root crontab and add entry to run every 10 minutes
+**** DONE Create /etc/cron.d/monitoring as a system cron file (not root's user crontab)
 CLOSED: [2026-03-11 Wed 15:00]
+#+begin_src sh
+echo "*/10 * * * * root /usr/local/sbin/monitoring.sh" > /etc/cron.d/monitoring
+chmod 644 /etc/cron.d/monitoring
+#+end_src
 *** DONE Verify monitoring.sh
 CLOSED: [2026-03-11 Wed 15:01]
 **** DONE Check if you can get host cpus on vm
@@ -638,15 +673,15 @@ semanage port -l | grep ssh
 
 **** TODO Cron — show current schedule and monitoring script
 #+begin_src sh
-crontab -l
-cat /root/.local/bin/monitoring.sh
+cat /etc/cron.d/monitoring
+cat /usr/local/sbin/monitoring.sh
 #+end_src
 
 **** TODO Cron — change to every minute (eval asks this live)
 #+begin_src sh
-crontab -e
+sed -i 's|^\*/10|*|' /etc/cron.d/monitoring
+cat /etc/cron.d/monitoring
 #+end_src
-Change ~*/10 * * * *~ to ~* * * * *~
 : minute | hour | day of month | month | day of week
 : ~*/10 * * * *~ = every 10 minutes
 : ~* * * * *~    = every minute
@@ -659,7 +694,7 @@ systemctl stop crond
 
 **** TODO Cron — after reboot verify script is unchanged
 #+begin_src sh
-cat /root/.local/bin/monitoring.sh
-stat /root/.local/bin/monitoring.sh
-ls -la /root/.local/bin/monitoring.sh
+cat /usr/local/sbin/monitoring.sh
+stat /usr/local/sbin/monitoring.sh
+ls -la /usr/local/sbin/monitoring.sh
 #+end_src

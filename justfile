@@ -6,7 +6,7 @@ install-path := "/usr/local/sbin/"
 
 vm-root:= proj-root / "vm"
 vm-name := "42-rocky-v2"
-vm-data := vm-root / vm-name
+vm-data := vm-root
 vm-file := vm-name + ".vdi"
 
 build     := proj-root / "build"
@@ -92,7 +92,7 @@ build-sig:
     #!/usr/bin/env nu
     cd {{vm-data}}; sha1sum {{vm-file}} | save -f {{sig-file}}
     mkdir -v {{build}}
-    mv {{vm-data}}/{{sig-file}} {{build}}/{{sig-file}}
+    mv -v {{vm-data}}/{{sig-file}} {{build}}/{{sig-file}}
 
 # copy readme into build/
 [group('build')]
