@@ -270,101 +270,105 @@ since this is standard practice.
 
 ### References
 
-[1] "5.4.4. Creating Thinly-Provisioned Logical Volumes | Logical Volume Manager Administration | Red Hat Enterprise Linux | 6 | Red Hat Documentation." Accessed: Feb. 21, 2026. [Online]. Available: https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/thinly_provisioned_volume_creation
+### Bibliography
 
-[2] "5.6. Controlling Traffic | Security Guide | Red Hat Enterprise Linux | 7 | Red Hat Documentation." Accessed: Feb. 24, 2026. [Online]. Available: https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-controlling_traffic#sec-Controlling_Ports_using_CLI
+[1] [“5.4.4. Creating Thinly-Provisioned Logical Volumes | Logical Volume Manager Administration | Red Hat Enterprise Linux | 6 | Red Hat Documentation.”](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/thinly_provisioned_volume_creation) Accessed: Feb. 21, 2026.
 
-[3] "7.8. Creating Audit Reports | Security Guide | Red Hat Enterprise Linux | 7 | Red Hat Documentation." Accessed: Mar. 10, 2026. [Online]. Available: https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-creating_audit_reports
+[2] [“5.6. Controlling Traffic | Security Guide | Red Hat Enterprise Linux | 7 | Red Hat Documentation.”](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-controlling_traffic#sec-Controlling_Ports_using_CLI) Accessed: Feb. 24, 2026.
 
-[4] A. Kili, "10 Useful Sudoers Configurations for Setting 'sudo' in Linux." Accessed: Feb. 24, 2026. [Online]. Available: https://www.tecmint.com/sudoers-configurations-for-setting-sudo-in-linux/
+[3] [“7.8. Creating Audit Reports | Security Guide | Red Hat Enterprise Linux | 7 | Red Hat Documentation.”](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-creating_audit_reports) Accessed: Mar. 10, 2026.
 
-[5] "12-D.14: UFW & firewalld," Engineering LibreTexts. Accessed: Mar. 09, 2026. [Online]. Available: https://eng.libretexts.org/Bookshelves/Computer_Science/Operating_Systems/Linux\_-_The_Penguin_Marches_On_(McClanahan)/12%3A_Linux_Systems_Security/4.14%3A_UFW_and_firewalld
+[4] A. Kili, [“10 Useful Sudoers Configurations for Setting ‘sudo’ in Linux.”](https://www.tecmint.com/sudoers-configurations-for-setting-sudo-in-linux/) Accessed: Feb. 24, 2026.
 
-[6] zrajm, "Answer to 'What is the difference between adduser and useradd?,'" Ask Ubuntu. Accessed: Feb. 24, 2026. [Online]. Available: https://askubuntu.com/a/381646
+[5] [“12-D.14: UFW & firewalld,”](<https://eng.libretexts.org/Bookshelves/Computer_Science/Operating_Systems/Linux_-_The_Penguin_Marches_On_(McClanahan)/12%3A_Linux_Systems_Security/4.14%3A_UFW_and_firewalld>) Engineering LibreTexts. Accessed: Mar. 09, 2026.
 
-[7] l0b0, "Answer to 'What is the preferred Bash shebang ("#!")?,'" Stack Overflow. Accessed: Mar. 07, 2026. [Online]. Available: https://stackoverflow.com/a/10383546
+[6] zrajm, [“Answer to ‘What is the difference between adduser and useradd?,’”](https://askubuntu.com/a/381646) Ask Ubuntu. Accessed: Feb. 24, 2026.
 
-[8] K. Thompson, "Answer to 'What is the preferred Bash shebang ("#!")?,'" Stack Overflow. Accessed: Mar. 07, 2026. [Online]. Available: https://stackoverflow.com/a/52860837
+[7] l0b0, [“Answer to ‘What is the preferred Bash shebang (“#!”)?,’”](https://stackoverflow.com/a/10383546) Stack Overflow. Accessed: Mar. 07, 2026.
 
-[9] wholerabbit, "Answer to 'What is the preferred Bash shebang ("#!")?,'" Stack Overflow. Accessed: Mar. 07, 2026. [Online]. Available: https://stackoverflow.com/a/10376235
+[8] K. Thompson, [“Answer to ‘What is the preferred Bash shebang (“#!”)?,’”](https://stackoverflow.com/a/52860837) Stack Overflow. Accessed: Mar. 07, 2026.
 
-[10] "AppArmor," AppArmor. Accessed: Mar. 07, 2026. [Online]. Available: https://apparmor.net/
+[9] wholerabbit, [“Answer to ‘What is the preferred Bash shebang (“#!”)?,’”](https://stackoverflow.com/a/10376235) Stack Overflow. Accessed: Mar. 07, 2026.
 
-[11] "Chapter 13. Getting started with swap | Managing storage devices | Red Hat Enterprise Linux | 8 | Red Hat Documentation." Accessed: Feb. 22, 2026. [Online]. Available: https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/managing_storage_devices/getting-started-with-swap_managing-storage-devices
+[10] [“AppArmor,”](https://apparmor.net/) AppArmor. Accessed: Mar. 07, 2026.
 
-[12] "Classic SysAdmin: Linux 101: 5 Commands for Checking Memory Usage in Linux - Linux Foundation." Accessed: Mar. 07, 2026. [Online]. Available: https://www.linuxfoundation.org/blog/blog/classic-sysadmin-linux-101-5-commands-for-checking-memory-usage-in-linux
+[11] [“Chapter 13. Getting started with swap | Managing storage devices | Red Hat Enterprise Linux | 8 | Red Hat Documentation.”](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/managing_storage_devices/getting-started-with-swap_managing-storage-devices) Accessed: Feb. 22, 2026.
 
-[13] "Compiling SELinux Policy." Accessed: Mar. 09, 2026. [Online]. Available: https://ftp.iij.ad.jp/pub/linux/centos-vault/4.0beta/docs/html/rhel-selg-en-4/rhlcommon-chapter-0018.html
+[12] [“Classic SysAdmin: Linux 101: 5 Commands for Checking Memory Usage in Linux - Linux Foundation.”](https://www.linuxfoundation.org/blog/blog/classic-sysadmin-linux-101-5-commands-for-checking-memory-usage-in-linux) Accessed: Mar. 07, 2026.
 
-[14] "Computer data storage," Wikipedia. Mar. 02, 2026. Accessed: Mar. 08, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Computer_data_storage&oldid=1341277385#Primary
+[13] [“Compiling SELinux Policy.”](https://ftp.iij.ad.jp/pub/linux/centos-vault/4.0beta/docs/html/rhel-selg-en-4/rhlcommon-chapter-0018.html) Accessed: Mar. 09, 2026.
 
-[15] "Datagram Congestion Control Protocol," Wikipedia. Aug. 26, 2025. Accessed: Feb. 24, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Datagram_Congestion_Control_Protocol&oldid=1307879922
+[14] [“Computer data storage,”](https://en.wikipedia.org/w/index.php?title=Computer_data_storage&oldid=1341277385#Primary) Wikipedia. Mar. 02, 2026. Accessed: Mar. 08, 2026.
 
-[16] S. Smollen, "Debugging Bash Scripts with $PS4," Spencer Smolen. Accessed: Mar. 07, 2026. [Online]. Available: https://spencersmolen.com/debugging-bash/
+[15] [“Datagram Congestion Control Protocol,”](https://en.wikipedia.org/w/index.php?title=Datagram_Congestion_Control_Protocol&oldid=1307879922) Wikipedia. Aug. 26, 2025. Accessed: Feb. 24, 2026.
 
-[17] "Difference Between TCP, UDP and SCTP Protocols," GeeksforGeeks. Accessed: Feb. 24, 2026. [Online]. Available: https://www.geeksforgeeks.org/computer-networks/tcp-vs-udp-vs-sctp/
+[16] S. Smollen, [“Debugging Bash Scripts with $PS4,”](https://spencersmolen.com/debugging-bash/) Spencer Smolen. Accessed: Mar. 07, 2026.
 
-[18] "End-to-end principle," Wikipedia. Feb. 23, 2026. Accessed: Feb. 24, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=End-to-end_principle&oldid=1340005850
+[17] [“Difference Between TCP, UDP and SCTP Protocols,”](https://www.geeksforgeeks.org/computer-networks/tcp-vs-udp-vs-sctp/) GeeksforGeeks. Accessed: Feb. 24, 2026.
 
-[19] R. L. Team, "FIPS Validation Update - June 2022," Rocky Linux. Accessed: Feb. 21, 2026. [Online]. Available: https://rockylinux.org/news/certifications-fips-2022-06-11
+[18] [“End-to-end principle,”](https://en.wikipedia.org/w/index.php?title=End-to-end_principle&oldid=1340005850) Wikipedia. Feb. 23, 2026. Accessed: Feb. 24, 2026.
 
-[20] "How to configure a hostname on a Linux system," Red Hat Blog. Accessed: Feb. 24, 2026. [Online]. Available: https://www.redhat.com/en/blog/configure-hostname-linux
+[19] R. L. Team, [“FIPS Validation Update - June 2022,”](https://rockylinux.org/news/certifications-fips-2022-06-11) Rocky Linux. Accessed: Feb. 21, 2026.
 
-[21] "How to List Users in Linux (9 Methods with Examples)." Accessed: Feb. 24, 2026. [Online]. Available: https://www.strongdm.com/blog/how-to-list-users-linux
+[20] [“How to configure a hostname on a Linux system,”](https://www.redhat.com/en/blog/configure-hostname-linux) Red Hat Blog. Accessed: Feb. 24, 2026.
 
-[22] "How to read and correct SELinux denial messages," Red Hat Blog. Accessed: Mar. 10, 2026. [Online]. Available: https://www.redhat.com/en/blog/selinux-denial2
+[21] [“How to List Users in Linux (9 Methods with Examples).”](https://www.strongdm.com/blog/how-to-list-users-linux) Accessed: Feb. 24, 2026.
 
-[23] Casey, "How to recover root password - Rocky Linux Help & Support," Rocky Linux Forum. Accessed: Mar. 07, 2026. [Online]. Available: https://forums.rockylinux.org/t/how-to-recover-root-password/3433/8
+[22] [“How to read and correct SELinux denial messages,”](https://www.redhat.com/en/blog/selinux-denial2) Red Hat Blog. Accessed: Mar. 10, 2026.
 
-[24] I. Walker, "How to recover root password - Rocky Linux Help & Support," Rocky Linux Forum. Accessed: Mar. 07, 2026. [Online]. Available: https://forums.rockylinux.org/t/how-to-recover-root-password/3433/2
+[23] Casey, [“How to recover root password - Rocky Linux Help & Support,”](https://forums.rockylinux.org/t/how-to-recover-root-password/3433/8) Rocky Linux Forum. Accessed: Mar. 07, 2026.
 
-[25] "Instance (computer science)," Wikipedia. Feb. 09, 2026. Accessed: Mar. 08, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Instance\_(computer_science)&oldid=1337521647
+[24] I. Walker, [“How to recover root password - Rocky Linux Help & Support,”](https://forums.rockylinux.org/t/how-to-recover-root-password/3433/2) Rocky Linux Forum. Accessed: Mar. 07, 2026.
 
-[26] "Linux Security Modules," Wikipedia. Mar. 04, 2026. Accessed: Mar. 07, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Linux_Security_Modules&oldid=1341653422
+[25] [“Instance (computer science),”](<https://en.wikipedia.org/w/index.php?title=Instance_(computer_science)&oldid=1337521647>) Wikipedia. Feb. 09, 2026. Accessed: Mar. 08, 2026.
 
-[27] "Mandatory access control," Wikipedia. Jan. 23, 2026. Accessed: Mar. 07, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Mandatory_access_control&oldid=1334399622
+[26] [“Linux Security Modules,”](https://en.wikipedia.org/w/index.php?title=Linux_Security_Modules&oldid=1341653422) Wikipedia. Mar. 04, 2026. Accessed: Mar. 07, 2026.
 
-[28] "Minimum hardware requirements - Documentation." Accessed: Feb. 22, 2026. [Online]. Available: https://docs.rockylinux.org/10/de/guides/minimum_hardware_requirements/
+[27] [“Mandatory access control,”](https://en.wikipedia.org/w/index.php?title=Mandatory_access_control&oldid=1334399622) Wikipedia. Jan. 23, 2026. Accessed: Mar. 07, 2026.
 
-[29] C. Beaudet and Wayne Maw, "Overview of SELinux and AppArmor," in SUSECON 2021 - BOV-1067, Nov. 10, 2021. Accessed: Mar. 07, 2026. [Online]. Available: https://www.youtube.com/watch?v=9dqHOrM4KHo
+[28] [“Minimum hardware requirements - Documentation.”](https://docs.rockylinux.org/10/de/guides/minimum_hardware_requirements/) Accessed: Feb. 22, 2026.
 
-[30] "PAM authentication modules - Documentation." Accessed: Feb. 24, 2026. [Online]. Available: https://docs.rockylinux.org/10/guides/security/pam/
+[29] C. Beaudet and Wayne Maw, [“Overview of SELinux and AppArmor,”](https://www.youtube.com/watch?v=9dqHOrM4KHo) in SUSECON 2021 - BOV-1067, Nov. 10, 2021. Accessed: Mar. 07, 2026.
 
-[31] D. F. Frisenna, "Passphrases are easier to remember, but are they secure enough?," SySS Tech Blog. Accessed: Feb. 22, 2026. [Online]. Available: https://blog.syss.com/posts/passphrases/
+[30] [“Packaging:CronFiles,”](https://fedoraproject.org/wiki/Packaging:CronFiles) Fedora Project Wiki. Fedora. Accessed: Mar. 13, 2026.
 
-[32] "Persistence (computer science)," Wikipedia. Oct. 17, 2025. Accessed: Mar. 08, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Persistence\_(computer_science)&oldid=1317234327
+[31] [“PAM authentication modules - Documentation.”](https://docs.rockylinux.org/10/guides/security/pam/) Accessed: Feb. 24, 2026.
 
-[33] "Processor (computing)," Wikipedia. Feb. 27, 2026. Accessed: Mar. 08, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Processor\_(computing)&oldid=1340750781
+[32] D. F. Frisenna, [“Passphrases are easier to remember, but are they secure enough?,”](https://blog.syss.com/posts/passphrases/) SySS Tech Blog. Accessed: Feb. 22, 2026.
 
-[34] "Processor register," Wikipedia. Feb. 06, 2026. Accessed: Mar. 08, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Processor_register&oldid=1336997801
+[33] [“Persistence (computer science),”](<https://en.wikipedia.org/w/index.php?title=Persistence_(computer_science)&oldid=1317234327>) Wikipedia. Oct. 17, 2025. Accessed: Mar. 08, 2026.
 
-[35] "Quick start to write a custom SELinux policy," Red Hat Customer Portal. Accessed: Mar. 09, 2026. [Online]. Available: https://access.redhat.com/articles/6999267
+[34] [“Processor (computing),”](<https://en.wikipedia.org/w/index.php?title=Processor_(computing)&oldid=1340750781>) Wikipedia. Feb. 27, 2026. Accessed: Mar. 08, 2026.
 
-[36] "Rocky Linux 10 : Set Password Rules : Server World." Accessed: Feb. 24, 2026. [Online]. Available: https://www.server-world.info/en/note?os=Rocky_Linux_10&p=pam&f=1
+[35] [“Processor register,”](https://en.wikipedia.org/w/index.php?title=Processor_register&oldid=1336997801) Wikipedia. Feb. 06, 2026. Accessed: Mar. 08, 2026.
 
-[37] "Rocky Linux 10 (Red Quartz) – Minimum Hardware Requirements - Documentation." Accessed: Feb. 22, 2026. [Online]. Available: https://docs.rockylinux.org/10/guides/minimum_hardware_requirements/
+[36] [“Quick start to write a custom SELinux policy,”](https://access.redhat.com/articles/6999267) Red Hat Customer Portal. Accessed: Mar. 09, 2026.
 
-[38] "Secure environment," Wikipedia. Oct. 03, 2025. Accessed: Mar. 07, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Secure_environment&oldid=1314911000
+[37] [“Rocky Linux 10 : Set Password Rules : Server World.”](https://www.server-world.info/en/note?os=Rocky_Linux_10&p=pam&f=1) Accessed: Feb. 24, 2026.
 
-[39] "Shebang (Unix)," Wikipedia. Feb. 11, 2026. Accessed: Mar. 07, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Shebang\_(Unix)&oldid=1337789593#Portability
+[38] [“Rocky Linux 10 (Red Quartz) – Minimum Hardware Requirements - Documentation.”](https://docs.rockylinux.org/10/guides/minimum_hardware_requirements/) Accessed: Feb. 22, 2026.
 
-[40] "Signature.txt | Born2BeRoot Guide." Accessed: Mar. 05, 2026. [Online]. Available: https://noreply.gitbook.io/born2beroot/virtual-machine-setup/signature.txt
+[39] [“Secure environment,”](https://en.wikipedia.org/w/index.php?title=Secure_environment&oldid=1314911000) Wikipedia. Oct. 03, 2025. Accessed: Mar. 07, 2026.
 
-[41] "SwapFaq - Community Help Wiki." Accessed: Feb. 22, 2026. [Online]. Available: https://help.ubuntu.com/community/SwapFaq
+[40] [“Shebang (Unix),”](<https://en.wikipedia.org/w/index.php?title=Shebang_(Unix)&oldid=1337789593#Portability>) Wikipedia. Feb. 11, 2026. Accessed: Mar. 07, 2026.
 
-[42] "Technologies for container isolation: A comparison of AppArmor and SELinux." Accessed: Mar. 07, 2026. [Online]. Available: https://www.redhat.com/en/blog/apparmor-selinux-isolation
+[41] [“Signature.txt | Born2BeRoot Guide.”](https://noreply.gitbook.io/born2beroot/virtual-machine-setup/signature.txt) Accessed: Mar. 05, 2026.
 
-[43] "Tested: VirtualBox now supports Windows on M-series Macs, but it's not for beginners," Macworld. Accessed: Mar. 09, 2026. [Online]. Available: https://www.macworld.com/article/2949071/virtualbox-review.html
+[42] [“SwapFaq - Community Help Wiki.”](https://help.ubuntu.com/community/SwapFaq) Accessed: Feb. 22, 2026.
 
-[44] "Thread (computing)," Wikipedia. Jan. 16, 2026. Accessed: Mar. 08, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Thread\_(computing)&oldid=1333190122
+[43] [“Technologies for container isolation: A comparison of AppArmor and SELinux.”](https://www.redhat.com/en/blog/apparmor-selinux-isolation) Accessed: Mar. 07, 2026.
 
-[45] "Time-of-check to time-of-use," Wikipedia. Mar. 05, 2026. Accessed: Mar. 07, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Time-of-check_to_time-of-use&oldid=1341785370
+[44] [“Tested: VirtualBox now supports Windows on M-series Macs, but it’s not for beginners,”](https://www.macworld.com/article/2949071/virtualbox-review.html) Macworld. Accessed: Mar. 09, 2026.
 
-[46] "User Management - Documentation." Accessed: Feb. 24, 2026. [Online]. Available: https://docs.rockylinux.org/10/books/admin_guide/06-users/
+[45] [“Thread (computing),”](<https://en.wikipedia.org/w/index.php?title=Thread_(computing)&oldid=1333190112>) Wikipedia. Jan. 16, 2026. Accessed: Mar. 08, 2026.
 
-[47] "Volatile memory," Wikipedia. Feb. 15, 2026. Accessed: Mar. 08, 2026. [Online]. Available: https://en.wikipedia.org/w/index.php?title=Volatile_memory&oldid=1338446607
+[46] [“Time-of-check to time-of-use,”](https://en.wikipedia.org/w/index.php?title=Time-of-check_to_time-of-use&oldid=1341785370) Wikipedia. Mar. 05, 2026. Accessed: Mar. 07, 2026.
 
-[48] J. Thijssen, "Why putting SSH on another port than 22 is bad idea," A Day In The Life Of... Accessed: Mar. 10, 2026. [Online]. Available: https://adayinthelifeof.nl//2012/03/12/why-putting-ssh-on-another-port-than-22-is-bad-idea/
+[47] [“User Management - Documentation.”](https://docs.rockylinux.org/10/books/admin_guide/06-users/) Accessed: Feb. 24, 2026.
+
+[48] [“Volatile memory,”](https://en.wikipedia.org/w/index.php?title=Volatile_memory&oldid=1338446607) Wikipedia. Feb. 15, 2026. Accessed: Mar. 08, 2026.
+
+[49] J. Thijssen, [“Why putting SSH on another port than 22 is bad idea,”](https://adayinthelifeof.nl//2012/03/12/why-putting-ssh-on-another-port-than-22-is-bad-idea/) A Day In The Life Of... Accessed: Mar. 10, 2026.
 
 ### AI Usage
 
