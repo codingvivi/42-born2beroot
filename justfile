@@ -48,10 +48,10 @@ test-all:
     just test-own
 
 test-fork:
-    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash ./tester.sh --login lrain --sudo-log /var/log/sudo/sudo.log  --pwquality /etc/security/pwqualit        y.conf.d/99-custom.conf
+    cd {{proj-root}}/tests/born2beroot-tester-rocky && sudo bash ./grade_me.sh -u lrain -m {{install-path}}/{{monitor-script}}
 
 test-own:    
-    cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh lrain luks/74eea0d3-8300-4a53-9df7-a66301776844
+    cd {{proj-root}}/tests/vrockychecc && sudo bash tester.sh --login lrain --sudo-log /var/log/sudo/sudo.log --pwquality /etc/security/pwquality.conf.d/99-custom.conf
 
 install-monitoring:
     mkdir -pv {{install-path}}
