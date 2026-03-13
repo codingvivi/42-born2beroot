@@ -53,8 +53,8 @@ To evaluate my project (or one using my folder structure):
   ```
   Or manually:
   ```sh
-  cp signature.txt vm/42-rocky/signature.txt
-  cd vm/42-rocky
+  cp signature.txt vm/
+  cd vm/
   shasum -c signature.txt
   rm signature.txt
   ```
