@@ -70,24 +70,58 @@ Clone the repo onto the VM, then:
 
 ```sh
 bash install-optional-eval-deps.sh
-./external/just test
+./external/just test-all
 ```
 
-`install-optional-eval-deps.sh` installs `just` into `external/` and initialises the test submodules, without requiring root or a package manager.
-`just test` runs both testers — the third-party `grade_me.sh` and the Rocky-specific `tester.sh`.
+`install-optional-eval-deps.sh` installs `tar` via dnf and `just` into `external/`, then initialises the test submodules.
+`just test-all` runs both testers — the third-party `grade_me.sh` and the Rocky-specific `tester.sh`.
 
 ### Building a submittable release
 
 Mirroring my build environment requires:
 
+- `tar` (which on rocky isn't preinstalled, on most other ones where you would want to build it prolly is though)
 - [`just`](https://github.com/casey/just)
 - [`nushell`](https://www.nushell.sh/)
 - [`gh`](https://cli.github.com/)
 
-For an overview of all my `just` recipes simply run
+For an overview of all my `just` recipes simply run `just`
 
-```sh
-   just
+```
+  > just
+Available recipes:
+    [build]
+    build-all          # build sig + readme
+    build-dist         # full build pipeline: sign, package, verify, backup
+    build-readme       # copy readme into build/
+    build-sig          # generate sha1 signature from vdi
+
+    [cleanup]
+    clean              # remove build/ and turnin/
+    fclean             # clean + remove dist/
+
+    [install]
+    install-monitoring # copy monitoring.sh to /usr/local/sbin/
+
+    [notes]
+    sync-notes-from    # pull todo.org from Documents
+    sync-notes-to      # push todo.org to Documents
+
+    [publish]
+    publish            # build-dist then publish to github releases
+
+    [test]
+    test-all           # run both testers
+    test-fork          # third-party tester  I forked
+    test-own           # my ownt tester (should have less false positives imo)
+
+    [verification]
+    check sig          # verify signature against vdi
+    recheck            # re-extract turnin.tar.gz and verify
+
+    [vm]
+    backup             # backup entire vm/ folder to ~/Temp/born2beroot-backups (VM must be powered off)
+    snapshot name      # take a named VirtualBox snapshot
 ```
 
 Creating a version to be submitted consists of creating a git tag first
@@ -109,22 +143,25 @@ This will
   suitable to be used as a folder to push the project submission from
 - verify the checksum by running the check from the same vm directory
 - create a `tar.gz` of the submission files and move them to the `dist/` folder
-- create the evaluation-allowed snapshot of the current vm’s state named after the current git tag
+- back up the vm folder
 - sync my notes (since technically they are part of this repo’s `source code` which is included in github releases)
 
-If the build completes successfully,
-the tar and the rest of the tracked repo files can be published to github via
+Then publish the release to GitHub:
 
 ```sh
-   just publish
+gh release create <tag> dist/turnin.tar.gz
 ```
 
-To clean up build artifacts:
+Tags can be created and managed with:
 
 ```sh
-just clean    # removes build/ and turnin/
-just fclean   # also removes dist/
+git tag <tag> -m "description"       # create annotated tag
+git tag                               # list tags
+git tag -d <tag>                      # delete tag locally
+git push origin <tag>                 # push tag to remote
+git push origin --delete <tag>        # delete tag on remote
 ```
+
 
 ## Project description
 
